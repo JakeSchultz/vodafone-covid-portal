@@ -41,5 +41,6 @@
 
 #right {
   grid-area: right;
+  overflow-y: scroll;
   /* background-color: wheat; */
 }

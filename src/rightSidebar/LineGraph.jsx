@@ -38,8 +38,6 @@ function LineGraph({ type, owi, loc }) {
     if (owi.length > 0) {
       rollUpOwidLineGraph(owi, loc, todayO, type);
     }
-
-    console.log(loc);
   }, [owi]);
 
   //Uses OWID Data to form a region line graph for cases, deaths, and vaccinations
@@ -61,7 +59,8 @@ function LineGraph({ type, owi, loc }) {
         ),
       (d) => d.date
     );
-    let color = type === "cases" ? "red" : type === "deaths" ? "pink" : "green";
+    let color =
+      type === "cases" ? "tomato" : type === "deaths" ? "white" : "green";
     data = unroll(data, ["date"], "value");
 
     linegraph(data, location, "%Y-%m-%d", color);
@@ -72,24 +71,28 @@ function LineGraph({ type, owi, loc }) {
   //Modify this to change visualization of line graph
   function linegraph(data, location, dateformat, color) {
     let graphType;
+    let titleText;
 
     if (type == "cases") {
       graphType = "#linegraph__cases";
+      titleText = "Infections";
     } else if (type == "deaths") {
       graphType = "#linegraph__deaths";
+      titleText = "Deaths";
     } else {
       graphType = "#linegraph__vaccines";
+      titleText = "Vaccinations";
     }
 
     var div = d3.select(graphType);
 
-    let title = div
-      .append("h2")
-      .attr("width", "100px")
-      .attr("display", "block")
-      .attr("margin", "auto")
-      .attr("stroke", "black")
-      .text(location);
+    // let title = div
+    //   .append("h2")
+    //   .attr("width", "100px")
+    //   .attr("display", "block")
+    //   .attr("margin", "auto")
+    //   .attr("stroke", "black")
+    //   .text(titleText);
 
     var svg = div.append("svg").attr("width", 500).attr("height", 400);
     const margin = 100,
@@ -134,6 +137,36 @@ function LineGraph({ type, owi, loc }) {
       .call(d3.axisBottom(x));
 
     var yaxis = g.append("g").call(d3.axisLeft(y));
+
+    svg
+      .append("g")
+      .attr("transform", `translate(${15}, 0)`)
+      .call(y)
+      .call((g) =>
+        g
+          .append("text")
+          .attr("x", 10)
+          .attr("y", 10)
+          .attr("fill", "white")
+          .attr("font-size", "15px")
+          .attr("text-anchor", "start")
+          .text(titleText)
+      );
+
+    svg
+      .append("g")
+      .attr("transform", `translate(${460}, ${380})`)
+      .call(y)
+      .call((g) =>
+        g
+          .append("text")
+          .attr("x", 10)
+          .attr("y", 10)
+          .attr("fill", "white")
+          .attr("font-size", "15px")
+          .attr("text-anchor", "start")
+          .text("Date")
+      );
   }
 
   function unroll(rollup, keys, label = "value", p = {}) {
