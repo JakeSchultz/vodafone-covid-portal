@@ -1,0 +1,37 @@
+.country {
+  display: flex;
+  border-bottom: 1px solid white;
+}
+
+.country::before {
+  content: "";
+  display: flex;
+  width: 10px;
+  background-color: black;
+}
+
+.country:hover {
+  cursor: pointer;
+}
+
+.cSelected::before {
+  background-color: tomato;
+  margin-right: 5px;
+  color: aqua;
+}
+
+.country__content h1 {
+  margin-bottom: 0;
+}
+
+.country__statistics {
+  display: flex;
+}
+
+.country__statistics p {
+  margin-right: 4px;
+}
+
+.country__statistics-cases {
+  color: tomato;
+}

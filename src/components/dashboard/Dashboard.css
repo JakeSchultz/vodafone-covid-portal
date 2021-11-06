@@ -1,0 +1,45 @@
+#dashboard {
+  display: grid;
+  grid-template-areas:
+    "head head head"
+    "left   center right";
+  grid-template-columns: 1fr 1.5fr 1.5fr;
+  grid-template-rows: 11vh 89vh;
+}
+
+#dashboard__header {
+  grid-area: head;
+}
+
+#left {
+  grid-area: left;
+  overflow-y: scroll;
+  /* background-color: turquoise; */
+}
+
+#left::-webkit-scrollbar {
+  width: 10px;
+}
+
+#left::-webkit-scrollbar-track {
+  background-color: transparent;
+  background-color: #5e696b;
+}
+
+#left::-webkit-scrollbar-thumb {
+  background-color: #3e4344;
+}
+
+#left::-webkit-scrollbar-thumb:hover {
+  background-color: #c05454;
+}
+
+#center {
+  grid-area: center;
+  /* background-color: thistle; */
+}
+
+#right {
+  grid-area: right;
+  /* background-color: wheat; */
+}

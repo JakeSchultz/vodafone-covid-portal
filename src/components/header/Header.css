@@ -1,0 +1,15 @@
+#header {
+  /* color: white; */
+}
+
+#header__title {
+  display: flex;
+  margin-left: 30px;
+  align-items: center;
+}
+
+#header__title img {
+  width: 50px;
+  object-fit: contain;
+  margin-right: 15px;
+}
