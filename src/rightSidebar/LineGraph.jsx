@@ -38,6 +38,8 @@ function LineGraph({ type, owi, loc }) {
     if (owi.length > 0) {
       rollUpOwidLineGraph(owi, loc, todayO, type);
     }
+
+    console.log(loc);
   }, [owi]);
 
   //Uses OWID Data to form a region line graph for cases, deaths, and vaccinations
@@ -79,7 +81,6 @@ function LineGraph({ type, owi, loc }) {
       graphType = "#linegraph__vaccines";
     }
 
-    console.log(graphType);
     var div = d3.select(graphType);
 
     let title = div

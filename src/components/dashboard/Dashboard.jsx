@@ -59,10 +59,11 @@ function Dashboard() {
 
       setCountries(tempArr);
     });
-  }, []);
+  }, [selected]);
 
   function handleClick(country) {
     setSelected(country);
+    console.log(selected);
   }
 
   return (
@@ -71,7 +72,11 @@ function Dashboard() {
         <Header />
       </div>
       <div id="left">
-        <Countries handleClick={handleClick} data={countries} />
+        <Countries
+          selected={selected}
+          handleClick={handleClick}
+          data={countries}
+        />
       </div>
       <div id="center">
         <h1>center</h1>

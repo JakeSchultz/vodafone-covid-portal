@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./Country.css";
 
-function Country({ country, handleClick }) {
-  const [selected, setSelected] = useState(false);
+function Country({ country, handleClick, selected }) {
+  // const [selected, setSelected] = useState(false);
 
   function handleClickCountry() {
-    setSelected(selected === false ? true : false);
-    // console.log("you clicked me");
+    // setSelected(selected === false ? true : false);
     handleClick(country.country);
   }
 
   return (
     <div
-      className={`country ${selected === true ? "cSelected" : ""}`}
+      className={`country ${selected === country.country ? "cSelected" : ""}`}
       onClick={handleClickCountry}
     >
       <div className="country__content">
