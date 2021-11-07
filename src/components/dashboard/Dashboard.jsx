@@ -6,6 +6,9 @@ import "./Dashboard.css";
 import * as d3 from "d3";
 
 function Dashboard() {
+  const [owiData, setOwiData] = useState([]);
+  const [jhuData, setJhuData] = useState([]);
+
   const [countries, setCountries] = useState([]);
   const [selected, setSelected] = useState("Afghanistan");
   const [allData, setAllData] = useState([]);
@@ -27,18 +30,16 @@ function Dashboard() {
     const mm = String(yesterdayDate.getMonth() + 1).padStart(2, "0");
     const yyyy = yesterdayDate.getFullYear();
 
-    return yyyy + "-" + mm + "-" + dd;
+    return [yyyy + "-" + mm + "-" + dd, mm + "-" + dd + "-" + yyyy];
   }
 
-  jhu += generateDate(1) + ".csv";
+  jhu += generateDate(1)[1] + ".csv";
 
   useEffect(() => {
-    d3.csv(owi).then((result) => {
-      const filteredData = result
-        .filter((d) => d.date == generateDate(1))
+    Promise.all([d3.csv(owi), d3.csv(jhu)]).then((loadData) => {
+      const filteredData = loadData[0]
+        .filter((d) => d.date == generateDate(1)[0])
         .filter((d) => d.location != "");
-
-      setAllData(result);
 
       const confirmed = d3.rollup(
         filteredData,
@@ -58,13 +59,19 @@ function Dashboard() {
         tempArr.push({ country: k, cases: v, deaths: deaths.get(k) });
       }
 
+      setOwiData(loadData[0]);
+      setJhuData(loadData[1]);
       setCountries(tempArr);
     });
-  }, [selected]);
+  }, []);
+
+  console.log("owi");
+  console.log(owiData);
+  console.log("jhu");
+  console.log(jhuData);
 
   function handleClick(country) {
     setSelected(country);
-    console.log(selected);
   }
 
   return (
@@ -80,11 +87,11 @@ function Dashboard() {
           data={countries}
         />
       </div>
-      {/* <div id="center">
+      <div id="center">
         <h1>center</h1>
-      </div> */}
+      </div>
       <div id="right">
-        <Graphs owi={allData} loc={selected} />
+        <Graphs owi={owiData} jhu={jhuData} loc={selected} />
       </div>
     </div>
   );

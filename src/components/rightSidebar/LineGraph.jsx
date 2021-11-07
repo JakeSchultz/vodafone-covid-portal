@@ -196,7 +196,7 @@ function LineGraph({ type, owi, loc }) {
     ).flat();
   }
   return (
-    <div id={`linegraph__${type}`}>
+    <div style={{ marginBottom: "50px" }} id={`linegraph__${type}`}>
       {/* <div id="linegraph__cases"></div>
       <div id="linegraph__deaths"></div>
       <div id="linegraph__vaccines"></div> */}

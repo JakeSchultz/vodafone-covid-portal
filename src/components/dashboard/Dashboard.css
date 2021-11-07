@@ -1,11 +1,9 @@
 #dashboard {
-  /* margin-top: 50px; */
-  /* background-color: white; */
   display: grid;
   grid-template-areas:
     "head head head"
-    "left   right right";
-  grid-template-columns: 0.7fr 3fr;
+    "left   center right";
+  grid-template-columns: 0.8fr 2fr 1fr;
   grid-template-rows: 11vh 89vh;
 }
 
@@ -17,8 +15,6 @@
   grid-area: left;
   overflow-y: scroll;
   background-color: rgb(26, 26, 26);
-
-  /* background-color: turquoise; */
 }
 
 #left::-webkit-scrollbar {
@@ -39,8 +35,15 @@
 }
 
 #center {
+  margin-left: 25px;
   grid-area: center;
-  /* background-color: thistle; */
+  background-color: rgb(26, 26, 26);
+  height: 500px;
+  margin-top: 100px;
+}
+
+#right::-webkit-scrollbar {
+  display: none;
 }
 
 #right {
@@ -48,9 +51,4 @@
   overflow-y: scroll;
   margin-left: 30px;
   background-color: rgb(26, 26, 26);
-  /* background-color: wheat; */
-}
-
-#linegraph__cases {
-  /* background-color: #c05454; */
 }

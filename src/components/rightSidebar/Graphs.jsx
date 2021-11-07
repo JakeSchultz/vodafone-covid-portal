@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import LineGraph from "./LineGraph";
-import Treemap from "./Treemap";
 import { v4 as uuidv4 } from "uuid";
 import "./Graphs.css";
 import { Grid } from "@mui/material";
@@ -10,7 +9,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-function Graphs({ owi, loc }) {
+function Graphs({ owi, jhu, loc }) {
   const [value, setValue] = useState(0);
 
   function TabPanel(props) {
@@ -68,7 +67,7 @@ function Graphs({ owi, loc }) {
 
   return (
     <div id="country__graphs">
-      <Box sx={{ width: "100%" }}>
+      {/* <Box sx={{ width: "100%" }}>
         <Box
           sx={{ borderBottom: 1, borderColor: "divider", marginBottom: "20px" }}
         >
@@ -82,12 +81,12 @@ function Graphs({ owi, loc }) {
             <Tab label="world Treemaps" {...a11yProps(1)} />
           </Tabs>
         </Box>
-      </Box>
+      </Box> */}
 
-      {value == 0 && lineGraphs}
-      {value == 1 && (
-        <Treemap key={uuidv4()} type="deaths" owi={owi} loc={loc} />
-      )}
+      {/* {value == 0 && lineGraphs} */}
+      <LineGraph key={uuidv4()} type="cases" owi={owi} loc={loc} />
+      <LineGraph key={uuidv4()} type="deaths" owi={owi} loc={loc} />
+      <LineGraph key={uuidv4()} type="vaccines" owi={owi} loc={loc} />
     </div>
   );
 }
