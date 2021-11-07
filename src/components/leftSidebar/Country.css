@@ -3,6 +3,10 @@
   border-bottom: 1px solid white;
 }
 
+.country h1 {
+  font-size: 20px;
+}
+
 .country::before {
   content: "";
   display: flex;

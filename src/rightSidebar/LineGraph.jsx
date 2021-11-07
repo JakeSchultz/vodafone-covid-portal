@@ -70,17 +70,21 @@ function LineGraph({ type, owi, loc }) {
   //Line Graph (Line can represent cases, deaths, vaccinations in a region over a specific period of time)
   //Modify this to change visualization of line graph
   function linegraph(data, location, dateformat, color) {
+    for (const prop of data) {
+      prop.date = new Date(prop.date);
+    }
+
     let graphType;
     let titleText;
 
     if (type == "cases") {
-      graphType = "#linegraph__cases";
+      graphType = "#linegraph__" + type;
       titleText = "Infections";
     } else if (type == "deaths") {
-      graphType = "#linegraph__deaths";
+      graphType = "#linegraph__" + type;
       titleText = "Deaths";
     } else {
-      graphType = "#linegraph__vaccines";
+      graphType = "#linegraph__" + type;
       titleText = "Vaccinations";
     }
 
@@ -94,79 +98,89 @@ function LineGraph({ type, owi, loc }) {
     //   .attr("stroke", "black")
     //   .text(titleText);
 
-    var svg = div.append("svg").attr("width", 500).attr("height", 400);
-    const margin = 100,
-      width = svg.attr("width") - margin,
-      height = svg.attr("height") - margin;
+    const height = 500;
+    const width = 500;
+    const margin = {
+      top: 20,
+      right: 30,
+      bottom: 30,
+      left: 40,
+    };
 
-    var parseDate = d3.timeParse(dateformat);
+    const X = d3.map(data, (d) => d.date);
+    const Y = d3.map(data, (d) => d.value);
+    const I = d3.range(X.length);
 
-    var x = d3.scaleTime().range([0, width]);
-    var y = d3.scaleLinear().range([height, 0]);
+    var svg = div
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [0, 0, width, height])
+      .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
-    let valueline = d3
-      .line()
-      .x((d) => x(d.date))
-      .y((d) => y(d.value));
+    const xScale = d3
+      .scaleUtc()
+      .domain(d3.extent(X))
+      .range([margin.left, width - margin.right]);
+    const xAxis = d3.axisBottom(xScale).ticks(10).tickSizeOuter(0);
 
-    var g = svg
-      .append("g")
-      .attr("width", width + margin * 2)
-      .attr("height", height + margin * 2)
-      .attr("transform", `translate(${margin},${margin / 2})`);
+    const yScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(Y)])
+      .range([height - margin.bottom, margin.top]);
 
-    data.forEach(function (d) {
-      d.date = parseDate(d.date);
-      d.value = +d.value;
-    });
-
-    x.domain(d3.extent(data, (d) => d.date));
-    y.domain([0, d3.max(data, (d) => d.value)]);
-
-    const line = g
-      .append("path")
-      .data([data])
-      .attr("stroke", color)
-      .attr("fill", "none")
-      .attr("stroke-width", "4px")
-      .attr("d", valueline);
-
-    var xaxis = g
-      .append("g")
-      .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(x));
-
-    var yaxis = g.append("g").call(d3.axisLeft(y));
+    const yAxis = d3.axisLeft(yScale).ticks(10).tickSizeOuter(0);
 
     svg
       .append("g")
-      .attr("transform", `translate(${15}, 0)`)
-      .call(y)
+      .attr("transform", `translate(0,${height - margin.bottom})`)
+      .call(xAxis)
       .call((g) =>
         g
           .append("text")
-          .attr("x", 10)
+          .attr("x", width - margin.right)
+          .attr("y", margin.bottom)
+          .attr("fill", "currentColor")
+          .attr("text-anchor", "start")
+          .text("Date")
+      );
+
+    svg
+      .append("g")
+      .attr("transform", `translate(${margin.left},0)`)
+      .call(yAxis)
+      // .call((g) => g.select(".domain").remove())
+      .call((g) =>
+        g
+          .selectAll(".tick line")
+          .clone()
+          .attr("x2", width - margin.left - margin.right)
+          .attr("stroke-opacity", 0.1)
+      )
+      .call((g) =>
+        g
+          .append("text")
+          .attr("x", -margin.left)
           .attr("y", 10)
-          .attr("fill", "white")
-          .attr("font-size", "15px")
+          .attr("fill", "currentColor")
           .attr("text-anchor", "start")
           .text(titleText)
       );
 
+    const line = d3
+      .line()
+      .x((i) => xScale(X[i]))
+      .y((i) => yScale(Y[i]));
+
     svg
-      .append("g")
-      .attr("transform", `translate(${460}, ${380})`)
-      .call(y)
-      .call((g) =>
-        g
-          .append("text")
-          .attr("x", 10)
-          .attr("y", 10)
-          .attr("fill", "white")
-          .attr("font-size", "15px")
-          .attr("text-anchor", "start")
-          .text("Date")
-      );
+      .append("path")
+      .attr("fill", "none")
+      .attr("stroke", color)
+      .attr("stroke-width", 1.5)
+      .attr("stroke-linecap", "round")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-opacity", 1)
+      .attr("d", line(I));
   }
 
   function unroll(rollup, keys, label = "value", p = {}) {
@@ -181,16 +195,11 @@ function LineGraph({ type, owi, loc }) {
         : Object.assign({}, { ...p, [keys[0]]: key, [label]: value })
     ).flat();
   }
-  //   const svg = d3
-  //     .select("#linegraph__cases")
-  //     .append("svg")
-  //     .attr("width", "1fr")
-  //     .attr("height", 500);
   return (
-    <div className="linegraph">
-      <div id="linegraph__cases"></div>
+    <div id={`linegraph__${type}`}>
+      {/* <div id="linegraph__cases"></div>
       <div id="linegraph__deaths"></div>
-      <div id="linegraph__vaccines"></div>
+      <div id="linegraph__vaccines"></div> */}
     </div>
   );
 }
