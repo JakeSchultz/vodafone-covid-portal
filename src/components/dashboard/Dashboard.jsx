@@ -18,6 +18,7 @@ function Dashboard() {
 
   function generateDate(daysPast) {
     const todayDate = new Date();
+
     const yesterdayDate = new Date(todayDate);
 
     yesterdayDate.setDate(todayDate.getDate() - daysPast);
@@ -34,8 +35,10 @@ function Dashboard() {
   useEffect(() => {
     d3.csv(owi).then((result) => {
       const filteredData = result
-        .filter((d) => d.date === generateDate(1))
+        .filter((d) => d.date == generateDate(1))
         .filter((d) => d.location != "");
+
+      console.log(generateDate(2));
 
       setAllData(result);
 
@@ -72,15 +75,16 @@ function Dashboard() {
         <Header />
       </div>
       <div id="left">
+        <div id="left__info"></div>
         <Countries
           selected={selected}
           handleClick={handleClick}
           data={countries}
         />
       </div>
-      <div id="center">
+      {/* <div id="center">
         <h1>center</h1>
-      </div>
+      </div> */}
       <div id="right">
         <Graphs owi={allData} loc={selected} />
       </div>
