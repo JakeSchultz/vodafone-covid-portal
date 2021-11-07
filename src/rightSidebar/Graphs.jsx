@@ -49,21 +49,12 @@ function Graphs({ owi, loc }) {
     setValue(newValue);
   };
 
-  const styles = {
-    tab: {
-      padding: "2px 34px",
-      width: "140px",
-      height: "72px",
-      color: "white",
-    },
-  };
-
   return (
     <div id="country__graphs">
       <Box sx={{ width: "100%" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
-            textColor="white"
+            textColor="inherit"
             // indicatorColor="secondary"
             value={value}
             onChange={handleChange}
