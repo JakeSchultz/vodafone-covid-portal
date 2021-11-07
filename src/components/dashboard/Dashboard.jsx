@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../header/Header";
 import Countries from "../leftSidebar/Countries";
-import Graphs from "../../rightSidebar/Graphs";
+import Graphs from "../rightSidebar/Graphs";
 import "./Dashboard.css";
 import * as d3 from "d3";
 
@@ -37,8 +37,6 @@ function Dashboard() {
       const filteredData = result
         .filter((d) => d.date == generateDate(1))
         .filter((d) => d.location != "");
-
-      console.log(generateDate(2));
 
       setAllData(result);
 

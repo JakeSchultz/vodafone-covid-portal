@@ -19,9 +19,8 @@
 }
 
 .cSelected::before {
-  background-color: tomato;
+  background-color: rgba(22, 95, 199, 1);
   margin-right: 5px;
-  color: aqua;
 }
 
 .country__content h1 {

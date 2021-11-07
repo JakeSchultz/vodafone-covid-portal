@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import LineGraph from "./LineGraph";
+import Treemap from "./Treemap";
 import { v4 as uuidv4 } from "uuid";
 import "./Graphs.css";
 import { Grid } from "@mui/material";
@@ -46,47 +47,47 @@ function Graphs({ owi, loc }) {
   }
 
   const handleChange = (event, newValue) => {
+    console.log(newValue);
     setValue(newValue);
   };
+
+  const lineGraphs = (
+    <Grid container spacing={2}>
+      <Grid item xs={6}>
+        <LineGraph key={uuidv4()} type="cases" owi={owi} loc={loc} />
+      </Grid>
+      <Grid item xs={6}>
+        <LineGraph key={uuidv4()} type="deaths" owi={owi} loc={loc} />
+      </Grid>
+
+      <Grid item xs={6}>
+        <LineGraph key={uuidv4()} type="vaccines" owi={owi} loc={loc} />
+      </Grid>
+    </Grid>
+  );
 
   return (
     <div id="country__graphs">
       <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Box
+          sx={{ borderBottom: 1, borderColor: "divider", marginBottom: "20px" }}
+        >
           <Tabs
             textColor="inherit"
-            // indicatorColor="secondary"
             value={value}
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            <Tab label="Line Graphs" {...a11yProps(0)} />
-            <Tab label="Tree Map" {...a11yProps(1)} />
-            <Tab label="World Map" {...a11yProps(2)} />
+            <Tab label={`${loc} Line Graphs`} {...a11yProps(0)} />
+            <Tab label="world Treemaps" {...a11yProps(1)} />
           </Tabs>
         </Box>
-        <TabPanel value={value} index={0}>
-          Item One
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          Item Two
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          Item Three
-        </TabPanel>
       </Box>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <LineGraph key={uuidv4()} type="cases" owi={owi} loc={loc} />
-        </Grid>
-        <Grid item xs={6}>
-          <LineGraph key={uuidv4()} type="deaths" owi={owi} loc={loc} />
-        </Grid>
 
-        <Grid item xs={6}>
-          <LineGraph key={uuidv4()} type="vaccines" owi={owi} loc={loc} />
-        </Grid>
-      </Grid>
+      {value == 0 && lineGraphs}
+      {value == 1 && (
+        <Treemap key={uuidv4()} type="deaths" owi={owi} loc={loc} />
+      )}
     </div>
   );
 }
