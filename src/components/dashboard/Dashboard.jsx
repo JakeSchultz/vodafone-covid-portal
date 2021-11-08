@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../header/Header";
 import Countries from "../leftSidebar/Countries";
 import Graphs from "../rightSidebar/Graphs";
+import Center from "../center/Center";
 import "./Dashboard.css";
 import * as d3 from "d3";
 
@@ -65,11 +66,6 @@ function Dashboard() {
     });
   }, []);
 
-  console.log("owi");
-  console.log(owiData);
-  console.log("jhu");
-  console.log(jhuData);
-
   function handleClick(country) {
     setSelected(country);
   }
@@ -88,7 +84,7 @@ function Dashboard() {
         />
       </div>
       <div id="center">
-        <h1>center</h1>
+        <Center owi={owiData} countries={countries} />
       </div>
       <div id="right">
         <Graphs owi={owiData} jhu={jhuData} loc={selected} />
