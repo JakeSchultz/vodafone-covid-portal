@@ -1,0 +1,5 @@
+svg .country:hover {
+  stroke: red;
+  stroke-width: 1px;
+  cursor: pointer;
+}

@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import worldData from "../../util/custom.json";
 import * as d3 from "d3";
 import ResizeObserver from "./UseResizeObserver";
+import "./Center.css";
 
 // Draw the map
 
@@ -21,7 +22,8 @@ function Center({ owi, countries, mapData }) {
 
     const projection = d3
       .geoMercator()
-      .fitSize([width, height], selectedCountry || worldData);
+      .fitSize([width, height], selectedCountry || worldData)
+      .precision(150);
     const pathGenerator = d3.geoPath().projection(projection);
 
     const minType = d3.min(countries, (d) => d.cases);
@@ -51,6 +53,7 @@ function Center({ owi, countries, mapData }) {
       })
       .attr("class", "country")
       .transition()
+      .duration(1000)
       .attr("fill", (d) => colorScale(getCountryValue(d.properties.iso_a3)))
       .attr("stroke", "black")
       .attr("d", (d) => pathGenerator(d));
