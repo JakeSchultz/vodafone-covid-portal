@@ -1,5 +1,13 @@
+#world {
+  /* background-color: white; */
+}
+
 svg .country:hover {
   stroke: red;
   stroke-width: 1px;
   cursor: pointer;
+}
+
+svg .current {
+  stroke: aqua;
 }

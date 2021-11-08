@@ -85,7 +85,12 @@ function Dashboard() {
         />
       </div>
       <div id="center">
-        <Center owi={owiData} countries={countries} mapData={mapData} />
+        <Center
+          loc={selected}
+          owi={owiData}
+          countries={countries}
+          mapData={mapData}
+        />
       </div>
       <div id="right">
         <Graphs owi={owiData} jhu={jhuData} loc={selected} />

@@ -6,8 +6,10 @@ import "./Center.css";
 
 // Draw the map
 
-function Center({ owi, countries, mapData }) {
+function Center({ owi, countries, mapData, loc }) {
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = ResizeObserver(wrapperRef);
@@ -17,8 +19,13 @@ function Center({ owi, countries, mapData }) {
   useEffect(() => {
     const svg = d3.select(svgRef.current);
 
+    console.log(loc);
+
     const { width, height } =
       dimensions || wrapperRef.current.getBoundingClientRect();
+
+    setWidth(width);
+    setHeight(height);
 
     const projection = d3
       .geoMercator()
@@ -32,7 +39,7 @@ function Center({ owi, countries, mapData }) {
     const colorScale = d3
       .scaleLinear()
       .domain([minType, maxType])
-      .range(["#ccc", "#900"]);
+      .range(["#700", "#900"]);
 
     function getCountryValue(iso) {
       const country = mapData.find((c) => c.iso_code == iso);
@@ -55,9 +62,14 @@ function Center({ owi, countries, mapData }) {
       .transition()
       .duration(1000)
       .attr("fill", (d) => colorScale(getCountryValue(d.properties.iso_a3)))
+      //   .attr("stroke", (d) => {
+      //     if (d.properties.name == loc) return "green";
+      //     return "black";
+      //   })
       .attr("stroke", "black")
+      //   .attr("class", (d) => `${d.properties.name == loc ? "current" : ""}`)
       .attr("d", (d) => pathGenerator(d));
-  }, [owi, dimensions, mapData, countries, selectedCountry]);
+  }, [owi, dimensions, mapData, countries, selectedCountry, loc]);
   return (
     <div
       id="world"
@@ -67,7 +79,13 @@ function Center({ owi, countries, mapData }) {
       }}
       ref={wrapperRef}
     >
-      <svg style={{ width: 900, height: 700 }} ref={svgRef}></svg>
+      <svg
+        style={{
+          width: width,
+          height: height,
+        }}
+        ref={svgRef}
+      ></svg>
     </div>
   );
 }

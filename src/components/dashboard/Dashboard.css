@@ -3,7 +3,7 @@
   grid-template-areas:
     "head head head"
     "left   center right";
-  grid-template-columns: 0.8fr 2fr 1fr;
+  grid-template-columns: 18% 57% 25%;
   grid-template-rows: 11vh 89vh;
 }
 
