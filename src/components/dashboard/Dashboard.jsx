@@ -12,7 +12,7 @@ function Dashboard() {
 
   const [countries, setCountries] = useState([]);
   const [selected, setSelected] = useState("Afghanistan");
-  const [allData, setAllData] = useState([]);
+  const [mapData, setMapData] = useState([]);
 
   const owi =
     "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv";
@@ -60,6 +60,7 @@ function Dashboard() {
         tempArr.push({ country: k, cases: v, deaths: deaths.get(k) });
       }
 
+      setMapData(filteredData);
       setOwiData(loadData[0]);
       setJhuData(loadData[1]);
       setCountries(tempArr);
@@ -84,7 +85,7 @@ function Dashboard() {
         />
       </div>
       <div id="center">
-        <Center owi={owiData} countries={countries} />
+        <Center owi={owiData} countries={countries} mapData={mapData} />
       </div>
       <div id="right">
         <Graphs owi={owiData} jhu={jhuData} loc={selected} />

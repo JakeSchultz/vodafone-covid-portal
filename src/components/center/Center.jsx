@@ -1,15 +1,17 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import worldData from "../../util/custom.json";
 import * as d3 from "d3";
-import ResizeObserver from "./ResizeObserver";
+import ResizeObserver from "./UseResizeObserver";
 
-const svg = d3.select("#world").attr("width", 500).attr("height", 500);
 // Draw the map
 
-function Center({ owi, countries, property }) {
+function Center({ owi, countries, mapData }) {
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = ResizeObserver(wrapperRef);
+
+  //   console.log(mapData);
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
@@ -17,38 +19,52 @@ function Center({ owi, countries, property }) {
     const { width, height } =
       dimensions || wrapperRef.current.getBoundingClientRect();
 
-    const projection = d3.geoMercator().fitSize([width, height], worldData);
+    const projection = d3
+      .geoMercator()
+      .fitSize([width, height], selectedCountry || worldData);
     const pathGenerator = d3.geoPath().projection(projection);
 
     const minType = d3.min(countries, (d) => d.cases);
-    const maxType = d3.max(countries, (d) => d.deaths);
+    const maxType = d3.max(countries, (d) => d.cases);
 
     const colorScale = d3
       .scaleLinear()
       .domain([minType, maxType])
       .range(["#ccc", "#900"]);
 
-    function getCountryValue(name) {
-      const country = countries.find((c) => c.country == name);
+    function getCountryValue(iso) {
+      const country = mapData.find((c) => c.iso_code == iso);
 
       if (country != undefined) {
-        return country.cases;
+        const another = countries.find((c) => c.country == country.location);
+
+        if (another) return another.cases;
       }
     }
 
-    console.log(getCountryValue("Africa"));
     svg
       .selectAll(".country")
       .data(worldData.features)
       .join("path")
+      .on("click", (feature, d) => {
+        setSelectedCountry(selectedCountry === d ? null : d);
+      })
       .attr("class", "country")
-      .attr("fill", (d) => colorScale(getCountryValue(d.properties.name)))
-
+      .transition()
+      .attr("fill", (d) => colorScale(getCountryValue(d.properties.iso_a3)))
+      .attr("stroke", "black")
       .attr("d", (d) => pathGenerator(d));
-  }, [owi, dimensions, property, countries]);
+  }, [owi, dimensions, mapData, countries, selectedCountry]);
   return (
-    <div ref={wrapperRef} style={{ marginBottom: "1rem" }} id="world">
-      <svg width={900} height={500} ref={svgRef}></svg>
+    <div
+      id="world"
+      style={{
+        marginBottom: "1rem",
+        height: "100%",
+      }}
+      ref={wrapperRef}
+    >
+      <svg style={{ width: 900, height: 700 }} ref={svgRef}></svg>
     </div>
   );
 }
