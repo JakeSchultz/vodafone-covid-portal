@@ -42,16 +42,13 @@ function Center({ owi, countries, mapData, loc }) {
 
     const pathGenerator = d3.geoPath().projection(projection);
 
-    let minColor, maxColor;
+    let minColor = "white";
+    let maxColor = (value == 0)? "tomato" : "dimgray";
 
     const minType = d3.min(countries, (d) => {
       if (value == 0) {
-        minColor = "white";
-        maxColor = "tomato";
         return d.cases / d.population;
       }
-      minColor = "white";
-      maxColor = "#363636";
       if (value == 1) {
         return d.deaths / d.population;
       }
@@ -66,8 +63,7 @@ function Center({ owi, countries, mapData, loc }) {
         return d.deaths / d.population;
       }
     });
-    console.log(maxType);
-    console.log(minType);
+
     const colorScale = d3
       .scaleLinear()
       .domain([minType, maxType])
