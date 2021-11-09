@@ -2,24 +2,32 @@ import React, { useRef, useEffect, useState } from "react";
 import worldData from "../../util/custom.json";
 import * as d3 from "d3";
 import ResizeObserver from "./UseResizeObserver";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import "./Center.css";
-
 // Draw the map
 
 function Center({ owi, countries, mapData, loc }) {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
+  const [value, setValue] = React.useState(0);
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = ResizeObserver(wrapperRef);
 
-  //   console.log(mapData);
+  const rotConfig = {
+    speed: 0.01,
+    verticalTilted: -10,
+    horizontalTilted: 0,
+  };
 
+  //   console.log(mapData);
   useEffect(() => {
     const svg = d3.select(svgRef.current);
-
-    console.log(loc);
 
     const { width, height } =
       dimensions || wrapperRef.current.getBoundingClientRect();
@@ -31,10 +39,25 @@ function Center({ owi, countries, mapData, loc }) {
       .geoMercator()
       .fitSize([width, height], selectedCountry || worldData)
       .precision(150);
+
     const pathGenerator = d3.geoPath().projection(projection);
 
-    const minType = d3.min(countries,(d) => d.cases/d.population);
-    const maxType = d3.max(countries,(d) => d.cases/d.population);
+    const minType = d3.min(countries, (d) => {
+      if (value == 0) {
+        return d.cases / d.population;
+      }
+      if (value == 1) {
+        return d.deaths / d.population;
+      }
+    });
+    const maxType = d3.max(countries, (d) => {
+      if (value == 0) {
+        return d.cases / d.population;
+      }
+      if (value == 1) {
+        return d.deaths / d.population;
+      }
+    });
 
     const colorScale = d3
       .scaleLinear()
@@ -47,8 +70,21 @@ function Center({ owi, countries, mapData, loc }) {
       if (country != undefined) {
         const another = countries.find((c) => c.country == country.location);
 
-        if (another) return another.cases/another.population;
+        if (another) return another.cases / another.population;
       }
+    }
+
+    // rotateMap();
+
+    function rotateMap() {
+      d3.timer((elapsed) => {
+        projection.rotate([
+          rotConfig.speed * elapsed - 120,
+          rotConfig.verticalTilted,
+          rotConfig.horizontalTilted,
+        ]);
+        svg.selectAll("path").attr("d", pathGenerator);
+      });
     }
 
     svg
@@ -62,14 +98,48 @@ function Center({ owi, countries, mapData, loc }) {
       .transition()
       .duration(1000)
       .attr("fill", (d) => colorScale(getCountryValue(d.properties.iso_a3)))
-      //   .attr("stroke", (d) => {
-      //     if (d.properties.name == loc) return "green";
-      //     return "black";
-      //   })
+
       .attr("stroke", "black")
-      //   .attr("class", (d) => `${d.properties.name == loc ? "current" : ""}`)
       .attr("d", (d) => pathGenerator(d));
-  }, [owi, dimensions, mapData, countries, selectedCountry, loc]);
+  }, [owi, dimensions, mapData, countries, selectedCountry, loc, value]);
+
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+  };
+
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
+    };
+  }
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <div
       id="world"
@@ -79,6 +149,19 @@ function Center({ owi, countries, mapData, loc }) {
       }}
       ref={wrapperRef}
     >
+      <Box sx={{ width: "100%" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            textColor="white"
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="Cases" {...a11yProps(0)} />
+            <Tab label="Deaths" {...a11yProps(1)} />
+          </Tabs>
+        </Box>
+      </Box>
       <svg
         style={{
           width: width,
