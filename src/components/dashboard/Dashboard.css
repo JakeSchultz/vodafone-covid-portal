@@ -3,7 +3,7 @@
   grid-template-areas:
     "head head head"
     "left   center right";
-  grid-template-columns: 19% 45% 35%;
+  grid-template-columns: 19% 47% 33%;
   grid-template-rows: 11vh 89vh;
 }
 
@@ -35,7 +35,7 @@
 }
 
 #center {
-  margin-left: 25px;
+  margin-left: 10px;
   grid-area: center;
   background-color: rgb(26, 26, 26);
   /* grid-area: center;
@@ -51,6 +51,6 @@
 #right {
   grid-area: right;
   overflow-y: scroll;
-  margin-left: 30px;
+  margin-left: 10px;
   background-color: rgb(26, 26, 26);
 }

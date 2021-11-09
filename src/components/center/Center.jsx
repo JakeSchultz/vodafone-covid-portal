@@ -25,7 +25,6 @@ function Center({ owi, countries, mapData, loc }) {
     horizontalTilted: 0,
   };
 
-  //   console.log(mapData);
   useEffect(() => {
     const svg = d3.select(svgRef.current);
 
@@ -43,7 +42,13 @@ function Center({ owi, countries, mapData, loc }) {
     const pathGenerator = d3.geoPath().projection(projection);
 
     let minColor = "white";
-    let maxColor = (value == 0)? "tomato" : "dimgray";
+    let maxColor;
+
+    if (value == 0) maxColor = "tomato";
+
+    if (value == 1) maxColor = "dimgray";
+
+    if (value == 2) maxColor = "green";
 
     const minType = d3.min(countries, (d) => {
       if (value == 0) {
@@ -52,15 +57,21 @@ function Center({ owi, countries, mapData, loc }) {
       if (value == 1) {
         return d.deaths / d.population;
       }
+
+      if (value == 2) {
+        return d.vaccines / d.population;
+      }
     });
 
     const maxType = d3.max(countries, (d) => {
       if (value == 0) {
         return d.cases / d.population;
-
       }
       if (value == 1) {
         return d.deaths / d.population;
+      }
+      if (value == 2) {
+        return d.vaccines / d.population;
       }
     });
 
@@ -74,13 +85,16 @@ function Center({ owi, countries, mapData, loc }) {
 
       if (country != undefined) {
         const another = countries.find((c) => c.country == country.location);
-        if(value == 0){
+        if (value == 0) {
           if (another) return another.cases / another.population;
         }
-        if(value == 1){
+        if (value == 1) {
           if (another) return another.deaths / another.population;
         }
-        
+
+        if (value == 2) {
+          if (another) return another.vaccines / another.population;
+        }
       }
     }
 
@@ -121,8 +135,6 @@ function Center({ owi, countries, mapData, loc }) {
       .attr("fill", "green")
       .attr("x", 20)
       .attr("y", 25);
-
-    // svg.remove(".label");
   }, [owi, dimensions, mapData, countries, selectedCountry, loc, value]);
 
   function TabPanel(props) {
@@ -181,6 +193,7 @@ function Center({ owi, countries, mapData, loc }) {
           >
             <Tab label="Cases" {...a11yProps(0)} />
             <Tab label="Deaths" {...a11yProps(1)} />
+            <Tab label="Vaccines" {...a11yProps(2)} />
           </Tabs>
         </Box>
       </Box>

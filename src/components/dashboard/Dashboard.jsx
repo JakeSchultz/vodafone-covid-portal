@@ -61,6 +61,12 @@ function Dashboard() {
         (d) => d.location
       );
 
+      const vaccinated = d3.rollup(
+        filteredData,
+        (v) => d3.sum(v, (d) => d.people_vaccinated),
+        (d) => d.location
+      );
+
       const deaths = d3.rollup(
         filteredData,
         (v) => d3.sum(v, (d) => d.total_deaths),
@@ -81,6 +87,7 @@ function Dashboard() {
           cases: v,
           deaths: deaths.get(k),
           population: population.get(k),
+          vaccines: vaccinated.get(k),
         });
       }
 
