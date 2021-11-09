@@ -37,9 +37,8 @@
 #center {
   margin-left: 10px;
   grid-area: center;
-  background-color: rgb(26, 26, 26);
+  /* background-color: rgb(26, 26, 26); */
   /* grid-area: center;
-  background-color: rgb(26, 26, 26);
   height: 500px;
   margin-top: 100px; */
 }
@@ -52,5 +51,5 @@
   grid-area: right;
   overflow-y: scroll;
   margin-left: 10px;
-  background-color: rgb(26, 26, 26);
+  /* background-color: rgb(26, 26, 26); */
 }

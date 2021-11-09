@@ -28,14 +28,18 @@ function Center({ owi, countries, mapData, loc }) {
   useEffect(() => {
     const svg = d3.select(svgRef.current);
 
-    const { width, height } =
+    let { width, height } =
       dimensions || wrapperRef.current.getBoundingClientRect();
+
+    width -= 100;
+    height -= 100;
 
     setWidth(width);
     setHeight(height);
 
     const projection = d3
-      .geoMercator()
+      .geoOrthographic()
+      // .geoMercator()
       .fitSize([width, height], selectedCountry || worldData)
       .precision(150);
 
