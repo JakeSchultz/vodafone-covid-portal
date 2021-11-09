@@ -40,21 +40,8 @@ function Dashboard() {
     Promise.all([d3.csv(owi), d3.csv(jhu)]).then((loadData) => {
       const filteredData = loadData[0]
         .filter((d) => d.date == generateDate(1)[0])
-        .filter((d) => d.location != "")
-        .filter((d) => d.location != "World")
-        .filter((d) => d.location != "Asia")
-        .filter((d) => d.location != "Africa")
-        .filter((d) => d.location != "South America")
-        .filter((d) => d.location != "North America")
-        .filter((d) => d.location != "Europe")
-        .filter((d) => d.location != "European Union")
-        .filter((d) => d.location != "Oceania")
-        .filter((d) => d.location != "Low income")
-        .filter((d) => d.location != "Lower middle income")
-        .filter((d) => d.location != "Upper middle income")
-        .filter((d) => d.location != "High income")
-        .filter((d) => d.population != 0);
-        
+        .filter((d) => d.location != "");
+
       const confirmed = d3.rollup(
         filteredData,
         (v) => d3.sum(v, (d) => d.total_cases),
@@ -67,16 +54,10 @@ function Dashboard() {
         (d) => d.location
       );
 
-      const population = d3.rollup(
-        filteredData,
-        (v) => d3.sum(v, (d) => d.population),
-        (d) => d.location
-      );
-
       const tempArr = [];
 
       for (const [k, v] of confirmed.entries()) {
-        tempArr.push({ country: k, cases: v, deaths: deaths.get(k), population: population.get(k)});
+        tempArr.push({ country: k, cases: v, deaths: deaths.get(k) });
       }
 
       setMapData(filteredData);
