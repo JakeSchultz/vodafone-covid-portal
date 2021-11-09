@@ -42,35 +42,49 @@ function Center({ owi, countries, mapData, loc }) {
 
     const pathGenerator = d3.geoPath().projection(projection);
 
+    let minColor, maxColor;
+
     const minType = d3.min(countries, (d) => {
       if (value == 0) {
+        minColor = "white";
+        maxColor = "tomato";
         return d.cases / d.population;
       }
-      if (value == 1) {
-        return d.deaths / d.population;
-      }
-    });
-    const maxType = d3.max(countries, (d) => {
-      if (value == 0) {
-        return d.cases / d.population;
-      }
+      minColor = "white";
+      maxColor = "#363636";
       if (value == 1) {
         return d.deaths / d.population;
       }
     });
 
+    const maxType = d3.max(countries, (d) => {
+      if (value == 0) {
+        return d.cases / d.population;
+
+      }
+      if (value == 1) {
+        return d.deaths / d.population;
+      }
+    });
+    console.log(maxType);
+    console.log(minType);
     const colorScale = d3
       .scaleLinear()
       .domain([minType, maxType])
-      .range(["white", "tomato"]);
+      .range([minColor, maxColor]);
 
     function getCountryValue(iso) {
       const country = mapData.find((c) => c.iso_code == iso);
 
       if (country != undefined) {
         const another = countries.find((c) => c.country == country.location);
-
-        if (another) return another.cases / another.population;
+        if(value == 0){
+          if (another) return another.cases / another.population;
+        }
+        if(value == 1){
+          if (another) return another.deaths / another.population;
+        }
+        
       }
     }
 
