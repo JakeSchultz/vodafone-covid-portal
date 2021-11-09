@@ -33,13 +33,13 @@ function Center({ owi, countries, mapData, loc }) {
       .precision(150);
     const pathGenerator = d3.geoPath().projection(projection);
 
-    const minType = d3.min(countries, (d) => d.cases);
-    const maxType = d3.max(countries, (d) => d.cases);
+    const minType = d3.min(countries,(d) => d.cases/d.population);
+    const maxType = d3.max(countries,(d) => d.cases/d.population);
 
     const colorScale = d3
       .scaleLinear()
       .domain([minType, maxType])
-      .range(["#700", "#900"]);
+      .range(["white", "tomato"]);
 
     function getCountryValue(iso) {
       const country = mapData.find((c) => c.iso_code == iso);
@@ -47,7 +47,7 @@ function Center({ owi, countries, mapData, loc }) {
       if (country != undefined) {
         const another = countries.find((c) => c.country == country.location);
 
-        if (another) return another.cases;
+        if (another) return another.cases/another.population;
       }
     }
 
