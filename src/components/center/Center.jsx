@@ -38,8 +38,8 @@ function Center({ owi, countries, mapData, loc }) {
     setHeight(height);
 
     const projection = d3
-      .geoOrthographic()
-      // .geoMercator()
+      // .geoOrthographic()
+      .geoMercator()
       .fitSize([width, height], selectedCountry || worldData)
       .precision(150);
 
