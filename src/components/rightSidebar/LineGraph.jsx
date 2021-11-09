@@ -104,7 +104,7 @@ function LineGraph({ type, owi, loc }) {
       top: 20,
       right: 30,
       bottom: 30,
-      left: 40,
+      left: 70,
     };
 
     const X = d3.map(data, (d) => d.date);

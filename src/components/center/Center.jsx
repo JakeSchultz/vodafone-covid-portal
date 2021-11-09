@@ -101,6 +101,18 @@ function Center({ owi, countries, mapData, loc }) {
 
       .attr("stroke", "black")
       .attr("d", (d) => pathGenerator(d));
+
+    svg
+      .selectAll(".label")
+      .data([selectedCountry])
+      .join("text")
+      .attr("class", "label")
+      .text((d) => d && d.properties.name)
+      .attr("fill", "green")
+      .attr("x", 20)
+      .attr("y", 25);
+
+    // svg.remove(".label");
   }, [owi, dimensions, mapData, countries, selectedCountry, loc, value]);
 
   function TabPanel(props) {
