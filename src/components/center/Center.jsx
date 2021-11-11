@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import "./Center.css";
 // Draw the map
 
-function Center({ owi, countries, mapData, loc }) {
+function Center({ countries, loc }) {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
@@ -24,6 +24,8 @@ function Center({ owi, countries, mapData, loc }) {
     verticalTilted: -10,
     horizontalTilted: 0,
   };
+
+  console.log(countries);
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
@@ -50,32 +52,49 @@ function Center({ owi, countries, mapData, loc }) {
 
     if (value == 0) maxColor = "tomato";
 
-    if (value == 1) maxColor = "dimgray";
+    if (value == 1) maxColor = "grey";
 
     if (value == 2) maxColor = "green";
 
+    if (value == 3) maxColor = "Yellow";
+
+    if (value == 4) maxColor = "purple";
+
     const minType = d3.min(countries, (d) => {
       if (value == 0) {
-        return d.cases / d.population;
+        return d.cases;
       }
       if (value == 1) {
-        return d.deaths / d.population;
+        return d.deaths;
       }
 
       if (value == 2) {
-        return d.vaccines / d.population;
+        return d.dosesAdmin;
+      }
+      if (value == 3) {
+        return d.insidentRate;
+      }
+
+      if (value == 4) {
+        return d.caseFatalityRation;
       }
     });
 
     const maxType = d3.max(countries, (d) => {
       if (value == 0) {
-        return d.cases / d.population;
+        return d.cases;
       }
       if (value == 1) {
-        return d.deaths / d.population;
+        return d.deaths;
       }
       if (value == 2) {
-        return d.vaccines / d.population;
+        return d.dosesAdmin;
+      }
+      if (value == 3) {
+        return d.insidentRate;
+      }
+      if (value == 4) {
+        return d.caseFatalityRation;
       }
     });
 
@@ -85,19 +104,27 @@ function Center({ owi, countries, mapData, loc }) {
       .range([minColor, maxColor]);
 
     function getCountryValue(iso) {
-      const country = mapData.find((c) => c.iso_code == iso);
+      const country = countries.find((c) => c.iso3 == iso);
 
       if (country != undefined) {
-        const another = countries.find((c) => c.country == country.location);
+        // const another = countries.find((c) => c.country == country.location);
         if (value == 0) {
-          if (another) return another.cases / another.population;
+          if (country) return country.cases;
         }
         if (value == 1) {
-          if (another) return another.deaths / another.population;
+          if (country) return country.deaths;
         }
 
         if (value == 2) {
-          if (another) return another.vaccines / another.population;
+          if (country) return country.dosesAdmin;
+        }
+
+        if (value == 3) {
+          if (country) return country.insidentRate;
+        }
+
+        if (value == 4) {
+          if (country) return country.caseFatalityRation;
         }
       }
     }
@@ -139,7 +166,7 @@ function Center({ owi, countries, mapData, loc }) {
       .attr("fill", "green")
       .attr("x", 20)
       .attr("y", 25);
-  }, [owi, dimensions, mapData, countries, selectedCountry, loc, value]);
+  }, [dimensions, countries, selectedCountry, loc, value]);
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -198,6 +225,8 @@ function Center({ owi, countries, mapData, loc }) {
             <Tab label="Cases" {...a11yProps(0)} />
             <Tab label="Deaths" {...a11yProps(1)} />
             <Tab label="Vaccines" {...a11yProps(2)} />
+            <Tab label="Insident Rate" {...a11yProps(3)} />
+            <Tab label="Case/Fatality Ratio" {...a11yProps(4)} />
           </Tabs>
         </Box>
       </Box>
