@@ -8,9 +8,10 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import "./Center.css";
+import legend from "d3-svg-legend";
 // Draw the map
 
-function Center({ countries, loc }) {
+function Center({ countries, loc, forClick }) {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
@@ -24,8 +25,6 @@ function Center({ countries, loc }) {
     verticalTilted: -10,
     horizontalTilted: 0,
   };
-
-  console.log(countries);
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
@@ -47,18 +46,33 @@ function Center({ countries, loc }) {
 
     const pathGenerator = d3.geoPath().projection(projection);
 
-    let minColor = "white";
-    let maxColor;
+    let type;
 
-    if (value == 0) maxColor = "tomato";
+    if (value == 0) type = "cases";
+    if (value == 1) type = "deaths";
+    if (value == 2) type = "dosesAdmin";
+    if (value == 3) type = "insidentRate";
+    if (value == 4) type = "caseFatalityRation";
 
-    if (value == 1) maxColor = "grey";
+    for (const l of countries) {
+      l[type] = normalize(l[type], type);
+      // console.log(l["cases"]);
+    }
 
-    if (value == 2) maxColor = "green";
+    console.log(countries);
 
-    if (value == 3) maxColor = "Yellow";
+    // let values = countries.map((d) => d.cases);
 
-    if (value == 4) maxColor = "purple";
+    function normalize(number, type) {
+      // console.log(d3.max(countries, (d) => d.cases));
+      const ratio = d3.max(countries, (d) => d[type]) / 100;
+
+      return Math.round(number / ratio);
+    }
+
+    function denormalize(number, type) {
+      const ratio = d3.max(countries, (d) => d[type]) / 100;
+    }
 
     const minType = d3.min(countries, (d) => {
       if (value == 0) {
@@ -82,7 +96,11 @@ function Center({ countries, loc }) {
 
     const maxType = d3.max(countries, (d) => {
       if (value == 0) {
-        return d.cases;
+        const val = d.cases;
+        if (d.country == "US") {
+          console.log(val + " for the us");
+        }
+        return val;
       }
       if (value == 1) {
         return d.deaths;
@@ -98,10 +116,47 @@ function Center({ countries, loc }) {
       }
     });
 
+    console.log(minType);
+    console.log(maxType);
+
     const colorScale = d3
+      // .scaleOrdinal()
       .scaleLinear()
-      .domain([minType, maxType])
-      .range([minColor, maxColor]);
+      // .domain([0, 20], [21, 40], [41, 60], [61, 80], [81, 100])
+      .domain(
+        [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        // [
+        //   [0, 10],
+        //   [11, 20],
+        //   [21, 30],
+        //   [31, 40],
+        //   [41, 50],
+        //   [51, 60],
+        //   [61, 70],
+        //   [71, 80],
+        //   [81, 90],
+        //   [91, 100],
+        // ]
+      )
+      .range([
+        // "yellow",
+        "rgb(110 64 170)",
+        "rgb(200 61 172)",
+        "rgb(246 83 118)",
+        "rgb(247 140 56)",
+        "rgb(201 211 59)",
+        "rgb(121 246 89)",
+        "rgb(73 234 141)",
+        "rgb(60 184 208)",
+        "rgb(71 117 222)",
+        "rgb(110 64 170)",
+      ]);
+    // .range(["white", "yellow", "purple", "tomato", "blue"]);
+
+    // const colorScale = d3
+    //   .scaleLinear()
+    //   .domain([minType, maxType])
+    //   .range([minColor, maxColor]);
 
     function getCountryValue(iso) {
       const country = countries.find((c) => c.iso3 == iso);
@@ -157,12 +212,34 @@ function Center({ countries, loc }) {
       .attr("stroke", "black")
       .attr("d", (d) => pathGenerator(d));
 
+    // svg.selectAll('.infoContainer').data([selectedCountry]).join('div').attr('class', 'infoContainer').t
+
+    svg
+      .selectAll("myCircles")
+      .data(countries)
+      .enter()
+      .append("circle")
+      .attr("transform", (d) => `translate(${projection([d.long, d.lat])})`)
+      .attr("r", 1)
+      .style("fill", "69b3a2")
+      .attr("stroke", "#69b3a2")
+      .attr("stroke-width", 3)
+      .attr("fill-opacity", 0.4);
+
     svg
       .selectAll(".label")
       .data([selectedCountry])
       .join("text")
       .attr("class", "label")
-      .text((d) => d && d.properties.name)
+      .text((d) => {
+        // console.log(d && d.properties.iso_a3);
+
+        if (d !== null) {
+          const country = forClick.find((c) => c.iso3 == d.properties.iso_a3);
+          console.log(country);
+          // return country.deaths + " " + country.cases;
+        }
+      })
       .attr("fill", "green")
       .attr("x", 20)
       .attr("y", 25);
@@ -187,6 +264,28 @@ function Center({ countries, loc }) {
       </div>
     );
   }
+
+  // const legnd = d3.select('#world')
+
+  var sequentialScale = d3
+    .scaleSequential(d3.interpolateRainbow)
+    .domain([0, 10]);
+
+  var svg = d3.select("svg");
+
+  svg
+    .append("g")
+    .attr("class", "legendSequential")
+    .attr("transform", `translate(10, ${height - 20})`);
+
+  var legendSequential = legend
+    .legendColor()
+    .shapeWidth(30)
+    .cells(10)
+    .orient("horizontal")
+    .scale(sequentialScale);
+
+  svg.select(".legendSequential").call(legendSequential);
 
   TabPanel.propTypes = {
     children: PropTypes.node,

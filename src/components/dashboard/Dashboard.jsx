@@ -183,8 +183,12 @@ function Dashboard() {
             loadData[5].find((d) => d.Country_Region === k).Population
           ),
           iso3: loadData[5].find((d) => d.Country_Region === k).iso3,
+          long: loadData[5].find((d) => d.Country_Region === k).Long_,
+          lat: loadData[5].find((d) => d.Country_Region === k).Lat,
         });
       }
+
+      console.log(tempArr);
 
       // setMapData(filteredData);
 
@@ -230,6 +234,7 @@ function Dashboard() {
         <Center
           loc={selected}
           countries={jhuData.countries}
+          forClick={jhuData.countries}
           // mapData={mapData}
         />
       </div>
