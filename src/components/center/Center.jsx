@@ -85,21 +85,21 @@ function Center({ countries, loc, forClick }) {
 
     const minType = d3.min(countries, (d) => {
       if (value == 0) {
-        return d.cases;
+        return d.cases / d.population;
       }
       if (value == 1) {
-        return d.deaths;
+        return d.deaths / d.population;
       }
 
       if (value == 2) {
-        return d.dosesAdmin;
+        return d.dosesAdmin / d.population;
       }
       if (value == 3) {
         return d.insidentRate;
       }
 
       if (value == 4) {
-        return d.caseFatalityRation;
+        return d.caseFatalityRation / d.population;
       }
     });
 
@@ -109,19 +109,19 @@ function Center({ countries, loc, forClick }) {
         if (d.country == "US") {
           console.log(val + " for the us");
         }
-        return val;
+        return val / d.population;
       }
       if (value == 1) {
-        return d.deaths;
+        return d.deaths / d.population;
       }
       if (value == 2) {
-        return d.dosesAdmin;
+        return d.dosesAdmin / d.population;
       }
       if (value == 3) {
         return d.insidentRate;
       }
       if (value == 4) {
-        return d.caseFatalityRation;
+        return d.caseFatalityRation / d.population;
       }
     });
 
@@ -136,14 +136,14 @@ function Center({ countries, loc, forClick }) {
       if (country != undefined) {
         // const another = countries.find((c) => c.country == country.location);
         if (value == 0) {
-          if (country) return country.cases;
+          if (country) return country.cases / country.population;
         }
         if (value == 1) {
-          if (country) return country.deaths;
+          if (country) return country.deaths / country.population;
         }
 
         if (value == 2) {
-          if (country) return country.dosesAdmin;
+          if (country) return country.dosesAdmin / country.population;
         }
 
         if (value == 3) {
@@ -151,7 +151,7 @@ function Center({ countries, loc, forClick }) {
         }
 
         if (value == 4) {
-          if (country) return country.caseFatalityRation;
+          if (country) return country.caseFatalityRation / country.population;
         }
       }
     }
@@ -295,7 +295,7 @@ function Center({ countries, loc, forClick }) {
             <Tab label="Deaths" {...a11yProps(1)} />
             <Tab label="Vaccines" {...a11yProps(2)} />
             <Tab label="Insident Rate" {...a11yProps(3)} />
-            <Tab label="Case/Fatality Ratio" {...a11yProps(4)} />
+            <Tab label="Fatality/Case Ratio" {...a11yProps(4)} />
           </Tabs>
         </Box>
       </Box>
