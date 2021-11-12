@@ -47,31 +47,40 @@ function Center({ countries, loc, forClick }) {
     const pathGenerator = d3.geoPath().projection(projection);
 
     let type;
+    let colorType = [];
 
-    if (value == 0) type = "cases";
-    if (value == 1) type = "deaths";
-    if (value == 2) type = "dosesAdmin";
-    if (value == 3) type = "insidentRate";
-    if (value == 4) type = "caseFatalityRation";
+    let colorRange = [
+      ["rgb(100, 75, 45)", "rgb(255, 75, 45)"],
+      ["rgb(220,220,220)", "rgb(112, 128, 144)"],
+      ["rgb(46, 73, 123)", "rgb(71, 187, 94)"],
+      ["rgb(255,250,205)", "rgb(255,255,0)"],
+      ["rgb(214,201,252)", "rgb(141,104,247)"],
+    ];
 
-    for (const l of countries) {
-      l[type] = normalize(l[type], type);
-      // console.log(l["cases"]);
+    if (value == 0) {
+      type = "cases";
+      // setColorType(colorRange[0]);
+      colorType = colorRange[0];
     }
-
-    console.log(countries);
-
-    // let values = countries.map((d) => d.cases);
-
-    function normalize(number, type) {
-      // console.log(d3.max(countries, (d) => d.cases));
-      const ratio = d3.max(countries, (d) => d[type]) / 100;
-
-      return Math.round(number / ratio);
+    if (value == 1) {
+      type = "deaths";
+      // setColorType(colorRange[1]);
+      colorType = colorRange[1];
     }
-
-    function denormalize(number, type) {
-      const ratio = d3.max(countries, (d) => d[type]) / 100;
+    if (value == 2) {
+      type = "dosesAdmin";
+      // setColorType(colorRange[2]);
+      colorType = colorRange[2];
+    }
+    if (value == 3) {
+      type = "insidentRate";
+      // setColorType(colorRange[3]);
+      colorType = colorRange[3];
+    }
+    if (value == 4) {
+      type = "caseFatalityRation";
+      // setColorType(colorRange[4]);
+      colorType = colorRange[4];
     }
 
     const minType = d3.min(countries, (d) => {
@@ -116,47 +125,10 @@ function Center({ countries, loc, forClick }) {
       }
     });
 
-    console.log(minType);
-    console.log(maxType);
-
     const colorScale = d3
-      // .scaleOrdinal()
       .scaleLinear()
-      // .domain([0, 20], [21, 40], [41, 60], [61, 80], [81, 100])
-      .domain(
-        [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        // [
-        //   [0, 10],
-        //   [11, 20],
-        //   [21, 30],
-        //   [31, 40],
-        //   [41, 50],
-        //   [51, 60],
-        //   [61, 70],
-        //   [71, 80],
-        //   [81, 90],
-        //   [91, 100],
-        // ]
-      )
-      .range([
-        // "yellow",
-        "rgb(110 64 170)",
-        "rgb(200 61 172)",
-        "rgb(246 83 118)",
-        "rgb(247 140 56)",
-        "rgb(201 211 59)",
-        "rgb(121 246 89)",
-        "rgb(73 234 141)",
-        "rgb(60 184 208)",
-        "rgb(71 117 222)",
-        "rgb(110 64 170)",
-      ]);
-    // .range(["white", "yellow", "purple", "tomato", "blue"]);
-
-    // const colorScale = d3
-    //   .scaleLinear()
-    //   .domain([minType, maxType])
-    //   .range([minColor, maxColor]);
+      .domain([minType, maxType])
+      .range(colorType);
 
     function getCountryValue(iso) {
       const country = countries.find((c) => c.iso3 == iso);
@@ -243,6 +215,24 @@ function Center({ countries, loc, forClick }) {
       .attr("fill", "green")
       .attr("x", 20)
       .attr("y", 25);
+
+    const linear = d3.scaleLinear().domain([0, 10]).range(colorType);
+
+    // svg = d3.select("svg");
+
+    svg
+      .append("g")
+      .attr("class", "legendLinear")
+      .attr("transform", `translate(10,${height - 20})`);
+
+    const legendLinear = legend
+      .legendColor()
+      .shapeWidth(30)
+      .cells(10)
+      .orient("horizontal")
+      .scale(linear);
+
+    svg.select(".legendLinear").call(legendLinear);
   }, [dimensions, countries, selectedCountry, loc, value]);
 
   function TabPanel(props) {
@@ -266,26 +256,6 @@ function Center({ countries, loc, forClick }) {
   }
 
   // const legnd = d3.select('#world')
-
-  var sequentialScale = d3
-    .scaleSequential(d3.interpolateRainbow)
-    .domain([0, 10]);
-
-  var svg = d3.select("svg");
-
-  svg
-    .append("g")
-    .attr("class", "legendSequential")
-    .attr("transform", `translate(10, ${height - 20})`);
-
-  var legendSequential = legend
-    .legendColor()
-    .shapeWidth(30)
-    .cells(10)
-    .orient("horizontal")
-    .scale(sequentialScale);
-
-  svg.select(".legendSequential").call(legendSequential);
 
   TabPanel.propTypes = {
     children: PropTypes.node,
