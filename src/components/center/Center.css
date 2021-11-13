@@ -3,7 +3,18 @@
 }
 
 svg .country:hover {
-  stroke: red;
   stroke-width: 1px;
   cursor: pointer;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 10;
+  visibility: hidden;
+  background-color: lightblue;
+  text-align: center;
+  padding: 4px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: orange;
 }

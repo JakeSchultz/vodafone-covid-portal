@@ -9,7 +9,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-function Graphs({ owi, jhu, loc }) {
+function Graphs({ jhuData, owi, jhu, loc }) {
   const [value, setValue] = useState(0);
 
   function TabPanel(props) {
@@ -84,9 +84,30 @@ function Graphs({ owi, jhu, loc }) {
       </Box> */}
 
       {/* {value == 0 && lineGraphs} */}
-      <LineGraph key={uuidv4()} type="cases" owi={owi} loc={loc} />
-      <LineGraph key={uuidv4()} type="deaths" owi={owi} loc={loc} />
-      <LineGraph key={uuidv4()} type="vaccines" owi={owi} loc={loc} />
+      {jhuData && (
+        <LineGraph
+          key={uuidv4()}
+          type="cases"
+          jhuData={jhuData.seriesConfirmed}
+          loc={loc}
+        />
+      )}
+      {jhuData && (
+        <LineGraph
+          key={uuidv4()}
+          type="deaths"
+          jhuData={jhuData.seriesDeaths}
+          loc={loc}
+        />
+      )}
+      {jhuData && (
+        <LineGraph
+          key={uuidv4()}
+          jhuData={jhuData.seriesVaccineDoses}
+          type="vaccines"
+          loc={loc}
+        />
+      )}
     </div>
   );
 }
