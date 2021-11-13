@@ -122,7 +122,7 @@ function LineGraph({ jhuData, type, owi, loc }) {
       .scaleUtc()
       .domain(d3.extent(X))
       .range([margin.left, width - margin.right]);
-    const xAxis = d3.axisBottom(xScale).ticks(10).tickSizeOuter(0);
+    const xAxis = d3.axisBottom(xScale).ticks(5).tickSizeOuter(0);
 
     const yScale = d3
       .scaleLinear()

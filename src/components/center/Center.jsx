@@ -11,7 +11,7 @@ import "./Center.css";
 import legend from "d3-svg-legend";
 // Draw the map
 
-function Center({ countries, loc, forClick }) {
+function Center({ countries, loc, worldMap }) {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
@@ -105,11 +105,7 @@ function Center({ countries, loc, forClick }) {
 
     const maxType = d3.max(countries, (d) => {
       if (value == 0) {
-        const val = d.cases;
-        if (d.country == "US") {
-          console.log(val + " for the us");
-        }
-        return val / d.population;
+        return d.cases / d.population;
       }
       if (value == 1) {
         return d.deaths / d.population;
@@ -130,8 +126,8 @@ function Center({ countries, loc, forClick }) {
       .domain([minType, maxType])
       .range(colorType);
 
-    function getCountryValue(iso) {
-      const country = countries.find((c) => c.iso3 == iso);
+    function getCountryValue(iso3) {
+      const country = countries.find((c) => c.iso3 == iso3);
 
       if (country != undefined) {
         // const another = countries.find((c) => c.country == country.location);
@@ -169,12 +165,38 @@ function Center({ countries, loc, forClick }) {
       });
     }
 
+    const di = (
+      <div className="info">
+        <h1>US</h1>
+        <p>cases</p>
+        <p>deaths</p>
+      </div>
+    );
+
+    var tooltip = d3.select("body").append("div").attr("class", "tooltip");
+
     svg
       .selectAll(".country")
       .data(worldData.features)
       .join("path")
-      .on("click", (feature, d) => {
-        setSelectedCountry(selectedCountry === d ? null : d);
+      .on("mouseover", (d) => {
+        return tooltip.style("visibility", "visible").text("radius = " + d);
+      })
+      // .on("click", (feature, d) => {
+      //   setSelectedCountry(selectedCountry === d ? null : d);
+      // })
+
+      .on("mousemove", (d) => {
+        return tooltip
+          .style("top", window.event.y - 50 + "px")
+          .style("left", window.event.x + 30 + "px")
+          .text(() => {
+            return d.path[0].__data__.properties.name;
+          });
+      })
+
+      .on("mouseout", function () {
+        return tooltip.style("visibility", "hidden");
       })
       .attr("class", "country")
       .transition()
@@ -184,19 +206,17 @@ function Center({ countries, loc, forClick }) {
       .attr("stroke", "black")
       .attr("d", (d) => pathGenerator(d));
 
-    // svg.selectAll('.infoContainer').data([selectedCountry]).join('div').attr('class', 'infoContainer').t
-
-    svg
-      .selectAll("myCircles")
-      .data(countries)
-      .enter()
-      .append("circle")
-      .attr("transform", (d) => `translate(${projection([d.long, d.lat])})`)
-      .attr("r", 1)
-      .style("fill", "69b3a2")
-      .attr("stroke", "#69b3a2")
-      .attr("stroke-width", 3)
-      .attr("fill-opacity", 0.4);
+    // svg
+    //   .selectAll("myCircles")
+    //   .data(countries)
+    //   .enter()
+    //   .append("circle")
+    //   .attr("transform", (d) => `translate(${projection([d.long, d.lat])})`)
+    //   .attr("r", 1)
+    //   .style("fill", "69b3a2")
+    //   .attr("stroke", "#69b3a2")
+    //   .attr("stroke-width", 3)
+    //   .attr("fill-opacity", 0.4);
 
     svg
       .selectAll(".label")
@@ -207,9 +227,9 @@ function Center({ countries, loc, forClick }) {
         // console.log(d && d.properties.iso_a3);
 
         if (d !== null) {
-          const country = forClick.find((c) => c.iso3 == d.properties.iso_a3);
-          console.log(country);
-          // return country.deaths + " " + country.cases;
+          const country = countries.find((c) => c.iso3 == d.properties.iso_a3);
+          // console.log(country);
+          return country.deaths + " " + country.cases;
         }
       })
       .attr("fill", "green")

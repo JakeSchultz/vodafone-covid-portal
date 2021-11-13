@@ -17,6 +17,7 @@ function Dashboard() {
     seriesVaccineDoses: [],
     countries: [],
     UID_ISO_FIPS_LookUp_Table: [],
+    worldMap: [],
   });
 
   // const [jhuCasesDailiyReport, setJhuCasesDailiyReport] = useState([]);
@@ -58,6 +59,9 @@ function Dashboard() {
 
   const vaccineDosesTSeries =
     "https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/time_series_covid19_vaccine_doses_admin_global.csv";
+
+  const worldMap =
+    "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
   function generateDate(daysPast) {
     const todayDate = new Date();
 
@@ -85,6 +89,7 @@ function Dashboard() {
       d3.csv(vaccineDailyReport),
       d3.csv(vaccineTSeires),
       d3.csv(vaccineDosesTSeries),
+      d3.csv(worldMap),
     ]).then((loadData) => {
       // const filteredData = loadData[0]
       //   .filter((d) => d.date == generateDate(1)[0])
@@ -188,8 +193,6 @@ function Dashboard() {
         });
       }
 
-      console.log(tempArr);
-
       // setMapData(filteredData);
 
       setjhuData({
@@ -201,6 +204,7 @@ function Dashboard() {
         seriesVaccines: loadData[7],
         seriesVaccineDoses: loadData[8],
         UID_ISO_FIPS_LookUp_Table: loadData[5],
+        worldMap: loadData[9],
       });
 
       // setJhuCasesDailiyReport(loadData[1]);
@@ -234,7 +238,7 @@ function Dashboard() {
         <Center
           loc={selected}
           countries={jhuData.countries}
-          forClick={jhuData.countries}
+          worldMap={jhuData.worldMap}
           // mapData={mapData}
         />
       </div>
