@@ -18,3 +18,8 @@ svg .country:hover {
   font-weight: bold;
   color: white;
 }
+
+.legendLinear {
+  position: absolute;
+  top: 100px;
+}
