@@ -20,15 +20,7 @@ function Dashboard() {
     worldMap: [],
   });
 
-  // const [jhuCasesDailiyReport, setJhuCasesDailiyReport] = useState([]);
-
-  // const [jhuSeriesConfirmed, setJhuSeriesConfirmed] = useState([]);
-  // const [jhuSeriesDeaths, setJhuSeriesDeaths] = useState([]);
-  // const [jhuSeriesRecovered, setJhuSeriesRecovered] = useState([]);
-
-  // const [countries, setCountries] = useState([]);
   const [selected, setSelected] = useState("Afghanistan");
-  // const [mapData, setMapData] = useState([]);
 
   const owi =
     "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv";
@@ -84,36 +76,6 @@ function Dashboard() {
       d3.csv(vaccineTSeires),
       d3.csv(vaccineDosesTSeries),
     ]).then((loadData) => {
-      // const filteredData = loadData[0]
-      //   .filter((d) => d.date == generateDate(1)[0])
-      //   .filter((d) => d.location != "")
-      //   .filter((d) => d.location != "World")
-      //   .filter((d) => d.location != "Asia")
-      //   .filter((d) => d.location != "Africa")
-      //   .filter((d) => d.location != "South America")
-      //   .filter((d) => d.location != "North America")
-      //   .filter((d) => d.location != "Europe")
-      //   .filter((d) => d.location != "European Union")
-      //   .filter((d) => d.location != "Oceania")
-      //   .filter((d) => d.location != "Low income")
-      //   .filter((d) => d.location != "Lower middle income")
-      //   .filter((d) => d.location != "Upper middle income")
-      //   .filter((d) => d.location != "High income")
-      //   .filter((d) => d.population != 0);
-
-      var dt = new Date();
-
-      // dt.getMonth() will return a month between 0 - 11
-      // we add one to get to the last day of the month
-      // so that when getDate() is called it will return the last day of the month
-      var month = dt.getMonth() + 1;
-      var year = dt.getFullYear();
-
-      // this line does the magic (in collab with the lines above)
-      var daysInMonth = new Date(year, month, 0).getDate();
-
-      // console.log(daysInMonth);
-
       const jhuCases = d3.rollup(
         loadData[1],
         (v) => d3.sum(v, (d) => d.Confirmed),
@@ -199,13 +161,6 @@ function Dashboard() {
         UID_ISO_FIPS_LookUp_Table: loadData[5],
         worldMap: loadData[9],
       });
-
-      // setJhuCasesDailiyReport(loadData[1]);
-      // setJhuSeriesConfirmed(loadData[2]);
-      // setJhuSeriesDeaths(loadData[3]);
-      // setJhuSeriesRecovered(loadData[4]);
-
-      // setCountries(tempArr);
     });
   }, []);
 

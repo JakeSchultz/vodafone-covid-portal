@@ -183,25 +183,7 @@ function LineGraph({ jhuData, type, owi, loc }) {
       .attr("d", line(I));
   }
 
-  function unroll(rollup, keys, label = "value", p = {}) {
-    return Array.from(rollup, ([key, value]) =>
-      value instanceof Map
-        ? unroll(
-            value,
-            keys.slice(1),
-            label,
-            Object.assign({}, { ...p, [keys[0]]: key })
-          )
-        : Object.assign({}, { ...p, [keys[0]]: key, [label]: value })
-    ).flat();
-  }
-  return (
-    <div style={{ marginBottom: "20px" }} id={`linegraph__${type}`}>
-      {/* <div id="linegraph__cases"></div>
-      <div id="linegraph__deaths"></div>
-      <div id="linegraph__vaccines"></div> */}
-    </div>
-  );
+  return <div style={{ marginBottom: "20px" }} id={`linegraph__${type}`}></div>;
 }
 
 export default LineGraph;

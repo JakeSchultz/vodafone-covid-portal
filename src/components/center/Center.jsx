@@ -9,7 +9,6 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import "./Center.css";
 import legend from "d3-svg-legend";
-// Draw the map
 
 function Center({ countries, loc, worldMap }) {
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -238,8 +237,6 @@ function Center({ countries, loc, worldMap }) {
 
     const linear = d3.scaleLinear().domain([0, 10]).range(colorType);
 
-    // svg = d3.select("svg");
-
     svg
       .append("g")
       .attr("class", "legendLinear")
@@ -274,8 +271,6 @@ function Center({ countries, loc, worldMap }) {
       </div>
     );
   }
-
-  // const legnd = d3.select('#world')
 
   TabPanel.propTypes = {
     children: PropTypes.node,
@@ -314,7 +309,7 @@ function Center({ countries, loc, worldMap }) {
             <Tab label="Cases" {...a11yProps(0)} />
             <Tab label="Deaths" {...a11yProps(1)} />
             <Tab label="Vaccines" {...a11yProps(2)} />
-            <Tab label="Insident Rate" {...a11yProps(3)} />
+            <Tab label="Incident Rate" {...a11yProps(3)} />
             <Tab label="Fatality/Case Ratio" {...a11yProps(4)} />
           </Tabs>
         </Box>
