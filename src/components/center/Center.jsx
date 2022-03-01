@@ -10,7 +10,6 @@ import Box from "@mui/material/Box";
 import "./Center.css";
 import legend from "d3-svg-legend";
 
-
 function Center({ countries, loc, worldMap }) {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [width, setWidth] = useState(null);
@@ -19,18 +18,6 @@ function Center({ countries, loc, worldMap }) {
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = ResizeObserver(wrapperRef);
-
-  var formatNumber = d3.format(".0f"),
-    formatBillion = function(x) { return formatNumber(x / 1e9) + "B"; },
-    formatMillion = function(x) { return formatNumber(x / 1e6) + "M"; },
-    formatThousand = function(x) { return formatNumber(x / 1e3) + "k"; };
-
-  function formatAbbreviation(x) {
-    var v = Math.abs(x);
-    return (v >= .9995e9 ? formatBillion
-        : v >= .9995e6 ? formatMillion
-        : formatThousand)(x);
-  }
 
   const rotConfig = {
     speed: 0.01,
@@ -253,11 +240,6 @@ function Center({ countries, loc, worldMap }) {
       .attr("fill", "green")
       .attr("x", 20)
       .attr("y", 25);
-
-      const thresholdScale = d3.scaleThreshold()
-      .domain([minType, maxType])
-      .range(colorType);
-      console.log(colorScale.range());
 
     const legendLinear = legend
       .legendColor()
