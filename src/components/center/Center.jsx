@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import "./Center.css";
 import legend from "d3-svg-legend";
 
+
 function Center({ countries, loc, worldMap }) {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [width, setWidth] = useState(null);
@@ -18,6 +19,18 @@ function Center({ countries, loc, worldMap }) {
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = ResizeObserver(wrapperRef);
+
+  var formatNumber = d3.format(".0f"),
+    formatBillion = function(x) { return formatNumber(x / 1e9) + "B"; },
+    formatMillion = function(x) { return formatNumber(x / 1e6) + "M"; },
+    formatThousand = function(x) { return formatNumber(x / 1e3) + "k"; };
+
+  function formatAbbreviation(x) {
+    var v = Math.abs(x);
+    return (v >= .9995e9 ? formatBillion
+        : v >= .9995e6 ? formatMillion
+        : formatThousand)(x);
+  }
 
   const rotConfig = {
     speed: 0.01,
@@ -47,6 +60,7 @@ function Center({ countries, loc, worldMap }) {
 
     let type;
     let colorType = [];
+    let f;
 
     let colorRange = [
       ["rgb(100, 75, 45)", "rgb(255, 75, 45)"],
@@ -60,63 +74,69 @@ function Center({ countries, loc, worldMap }) {
       type = "cases";
       // setColorType(colorRange[0]);
       colorType = colorRange[0];
+      f = d3.format(".2s");
     }
     if (value == 1) {
       type = "deaths";
       // setColorType(colorRange[1]);
       colorType = colorRange[1];
+      f = d3.format(".2s");
     }
     if (value == 2) {
       type = "dosesAdmin";
       // setColorType(colorRange[2]);
       colorType = colorRange[2];
+      f = d3.format(".2s");
     }
     if (value == 3) {
-      type = "insidentRate";
+      type = "incidentRate";
       // setColorType(colorRange[3]);
       colorType = colorRange[3];
+      f = d3.format(".2s");
     }
     if (value == 4) {
-      type = "caseFatalityRation";
+      type = "caseFatalityRatio";
       // setColorType(colorRange[4]);
       colorType = colorRange[4];
+      f = d3.format("0.1f");
     }
+    //filters out the U.S.
 
     const minType = d3.min(countries, (d) => {
       if (value == 0) {
-        return d.cases / d.population;
+        return d.cases;
       }
       if (value == 1) {
-        return d.deaths / d.population;
+        return d.deaths;
       }
 
       if (value == 2) {
-        return d.dosesAdmin / d.population;
+        return d.dosesAdmin;
       }
       if (value == 3) {
-        return d.insidentRate;
+        return (d.cases / d.population) * 100000;
       }
 
       if (value == 4) {
-        return d.caseFatalityRation / d.population;
+        return (d.deaths/d.cases) * 100;
       }
     });
 
     const maxType = d3.max(countries, (d) => {
       if (value == 0) {
-        return d.cases / d.population;
+        return d.cases;
       }
       if (value == 1) {
-        return d.deaths / d.population;
+        return d.deaths;
       }
       if (value == 2) {
-        return d.dosesAdmin / d.population;
+        return d.dosesAdmin;
       }
       if (value == 3) {
-        return d.insidentRate;
+        return (d.cases / d.population) * 100000;
       }
       if (value == 4) {
-        return d.caseFatalityRation / d.population;
+        return (d.deaths/d.cases) * 100;
       }
     });
 
@@ -127,26 +147,25 @@ function Center({ countries, loc, worldMap }) {
 
     function getCountryValue(iso3) {
       const country = countries.find((c) => c.iso3 == iso3);
-
       if (country != undefined) {
         // const another = countries.find((c) => c.country == country.location);
         if (value == 0) {
-          if (country) return country.cases / country.population;
+          if (country) return country.cases;
         }
         if (value == 1) {
-          if (country) return country.deaths / country.population;
+          if (country) return country.deaths;
         }
 
         if (value == 2) {
-          if (country) return country.dosesAdmin / country.population;
+          if (country) return country.dosesAdmin;
         }
 
         if (value == 3) {
-          if (country) return country.insidentRate;
+          if (country) return (country.cases / country.population) * 100000;
         }
 
         if (value == 4) {
-          if (country) return country.caseFatalityRation / country.population;
+          if (country)  return (country.deaths/country.cases) * 100;
         }
       }
     }
@@ -235,21 +254,25 @@ function Center({ countries, loc, worldMap }) {
       .attr("x", 20)
       .attr("y", 25);
 
-    const linear = d3.scaleLinear().domain([0, 10]).range(colorType);
+      const thresholdScale = d3.scaleThreshold()
+      .domain([minType, maxType])
+      .range(colorType);
+      console.log(colorScale.range());
+
+    const legendLinear = legend
+      .legendColor()
+      .shapeWidth(20)
+      .labelFormat(f)
+      .cells(10)
+      .orient("vertical")
+      .scale(colorScale);
 
     svg
       .append("g")
       .attr("class", "legendLinear")
-      .attr("transform", `translate(10,${height - 20})`);
+      .attr("transform", `translate(10,20)`)
+      .call(legendLinear);
 
-    const legendLinear = legend
-      .legendColor()
-      .shapeWidth(30)
-      .cells(10)
-      .orient("horizontal")
-      .scale(linear);
-
-    svg.select(".legendLinear").call(legendLinear);
   }, [dimensions, countries, selectedCountry, loc, value]);
 
   function TabPanel(props) {
