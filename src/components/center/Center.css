@@ -23,3 +23,6 @@ svg .country:hover {
   position: absolute;
   top: 100px;
 }
+.legendLinear text.label {
+  fill: white;
+}
