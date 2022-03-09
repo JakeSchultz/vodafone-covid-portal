@@ -30,7 +30,7 @@ jobs:
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{
             steps.date.outputs.date }}.csv
           downloaded_filename: jhu.csv
-                - run: mkdir -p data 
+      - run: mkdir -p data 
       - run: mv *.csv ./src/data/
       - uses: stefanzweifel/git-auto-commit-action@v4
         with: 
