@@ -1,7 +1,7 @@
 name: data
 on:
   schedule:
-    - cron: 59 23 * * *
+    - cron: 0 0 * * *
   workflow_dispatch: {}
   push:
     paths:
@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date '+%m-%d-%Y')"
+        run: echo "::set-output name=date::$(date -d yesterday '+%m-%d-%Y')"
       - name: Setup deno
         uses: denoland/setup-deno@main
         with:
