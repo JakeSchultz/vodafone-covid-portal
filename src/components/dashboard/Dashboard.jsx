@@ -44,7 +44,7 @@ function Dashboard() {
   const vaccineDailyReport =
     "https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/vaccine_data_global.csv";
 
-  const vaccineTSeires =
+  const vaccineTSeries =
     "https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/time_series_covid19_vaccine_global.csv";
 
   const vaccineDosesTSeries =
@@ -73,7 +73,7 @@ function Dashboard() {
       d3.csv(jhuTSeriesRecovered),
       d3.csv(uID_ISO_FIPS_LookUp_Table),
       d3.csv(vaccineDailyReport),
-      d3.csv(vaccineTSeires),
+      d3.csv(vaccineTSeries),
       d3.csv(vaccineDosesTSeries),
     ]).then((loadData) => {
       const jhuCases = d3.rollup(
@@ -187,7 +187,7 @@ function Dashboard() {
           loc={selected}
           countries={jhuData.countries}
           worldMap={jhuData.worldMap}
-          // mapData={mapData}
+        // mapData={mapData}
         />
       </div>
       <div id="right">
