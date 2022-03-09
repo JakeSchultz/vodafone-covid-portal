@@ -12,5 +12,5 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::"$(date + %m-%d-%Y)""
+        run: echo "::set-output name="date::$(date + %m-%d-%Y)""
       - run: echo "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv"
