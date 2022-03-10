@@ -5,6 +5,8 @@ import Graphs from "../rightSidebar/Graphs";
 import Center from "../center/Center";
 import "./Dashboard.css";
 import * as d3 from "d3";
+import jhuDailyReports from '../../data/jhu.csv';
+import vaccineDailyReport from '../../data/vaccineDailyReport.csv';
 
 function Dashboard() {
   const [jhuData, setjhuData] = useState({
@@ -25,9 +27,9 @@ function Dashboard() {
   const owi =
     "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv";
 
-  const jhuDailyReports = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${generateDate(
-    1
-  )}.csv`;
+  // const jhuDailyReports = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${generateDate(
+  //   1
+  // )}.csv`;
 
   const jhuTSeriesConfirmed =
     "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
@@ -41,8 +43,8 @@ function Dashboard() {
   const uID_ISO_FIPS_LookUp_Table =
     "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/UID_ISO_FIPS_LookUp_Table.csv";
 
-  const vaccineDailyReport =
-    "https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/vaccine_data_global.csv";
+  // const vaccineDailyReport =
+  //   "https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/vaccine_data_global.csv";
 
   const vaccineTSeries =
     "https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/time_series_covid19_vaccine_global.csv";
@@ -90,7 +92,7 @@ function Dashboard() {
 
       const jhuRecovered = d3.rollup(
         loadData[1],
-        (v) => d3.sum(v, (d) => d.Recoved),
+        (v) => d3.sum(v, (d) => d.Recovered), //changed this from recoved to recovered
         (d) => d.Country_Region
       );
 
