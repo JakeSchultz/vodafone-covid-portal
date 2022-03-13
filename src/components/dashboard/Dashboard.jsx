@@ -94,13 +94,13 @@ function Dashboard() {
         (d) => d.Country_Region
       );
 
-      const jhuIncidentRate = d3.rollup(
+      const jhuInsidentRate = d3.rollup(
         loadData[1],
         (v) => d3.sum(v, (d) => d.Incident_Rate),
         (d) => d.Country_Region
       );
 
-      const jhuCaseFatalityRatio = d3.rollup(
+      const jhuCaseFatalityRation = d3.rollup(
         loadData[1],
         (v) => d3.sum(v, (d) => d.Case_Fatality_Ratio),
         (d) => d.Country_Region
@@ -133,9 +133,9 @@ function Dashboard() {
           deaths: jhuDeaths.get(k),
           recovered: jhuRecovered.get(k),
           // Incident_Rate: Incidence Rate = cases per 100,000 persons.
-          incidentRate: jhuIncidentRate.get(k),
+          insidentRate: jhuInsidentRate.get(k),
           // Case_Fatality_Ratio (%): Case-Fatality Ratio (%) = Number recorded deaths / Number cases.
-          caseFatalityRatio: jhuCaseFatalityRatio.get(k),
+          caseFatalityRation: jhuCaseFatalityRation.get(k),
           dosesAdmin: jhuDosesAdministered.get(k),
           partiallyVacc: jhuPartiallyVaccinated.get(k),
           fullyVacc: jhuFullyVaccinated.get(k),

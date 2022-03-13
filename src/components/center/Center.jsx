@@ -47,7 +47,6 @@ function Center({ countries, loc, worldMap }) {
 
     let type;
     let colorType = [];
-    let f;
 
     let colorRange = [
       ["rgb(100, 75, 45)", "rgb(255, 75, 45)"],
@@ -61,69 +60,63 @@ function Center({ countries, loc, worldMap }) {
       type = "cases";
       // setColorType(colorRange[0]);
       colorType = colorRange[0];
-      f = d3.format(".2s");
     }
     if (value == 1) {
       type = "deaths";
       // setColorType(colorRange[1]);
       colorType = colorRange[1];
-      f = d3.format(".2s");
     }
     if (value == 2) {
       type = "dosesAdmin";
       // setColorType(colorRange[2]);
       colorType = colorRange[2];
-      f = d3.format(".2s");
     }
     if (value == 3) {
-      type = "incidentRate";
+      type = "insidentRate";
       // setColorType(colorRange[3]);
       colorType = colorRange[3];
-      f = d3.format(".2s");
     }
     if (value == 4) {
-      type = "caseFatalityRatio";
+      type = "caseFatalityRation";
       // setColorType(colorRange[4]);
       colorType = colorRange[4];
-      f = d3.format("0.1f");
     }
-    //filters out the U.S.
 
     const minType = d3.min(countries, (d) => {
       if (value == 0) {
-        return d.cases;
+        return d.cases / d.population;
       }
       if (value == 1) {
-        return d.deaths;
+        return d.deaths / d.population;
       }
 
       if (value == 2) {
-        return d.dosesAdmin;
+        return d.dosesAdmin / d.population;
       }
       if (value == 3) {
-        return (d.cases / d.population) * 100000;
+        return d.insidentRate;
       }
 
       if (value == 4) {
-        return (d.deaths/d.cases) * 100;
+        return d.caseFatalityRation / d.population;
       }
     });
 
     const maxType = d3.max(countries, (d) => {
       if (value == 0) {
-        return d.cases;
+        return d.cases / d.population;
       }
       if (value == 1) {
-        return d.deaths;
+        return d.deaths / d.population;
       }
       if (value == 2) {
-        return d.dosesAdmin;
+        return d.dosesAdmin / d.population;
       }
       if (value == 3) {
-        return (d.cases / d.population) * 100000;
+        return d.insidentRate;
       }
       if (value == 4) {
-        return (d.deaths/d.cases) * 100;
+        return d.caseFatalityRation / d.population;
       }
     });
 
@@ -134,25 +127,26 @@ function Center({ countries, loc, worldMap }) {
 
     function getCountryValue(iso3) {
       const country = countries.find((c) => c.iso3 == iso3);
+
       if (country != undefined) {
         // const another = countries.find((c) => c.country == country.location);
         if (value == 0) {
-          if (country) return country.cases;
+          if (country) return country.cases / country.population;
         }
         if (value == 1) {
-          if (country) return country.deaths;
+          if (country) return country.deaths / country.population;
         }
 
         if (value == 2) {
-          if (country) return country.dosesAdmin;
+          if (country) return country.dosesAdmin / country.population;
         }
 
         if (value == 3) {
-          if (country) return (country.cases / country.population) * 100000;
+          if (country) return country.insidentRate;
         }
 
         if (value == 4) {
-          if (country)  return (country.deaths/country.cases) * 100;
+          if (country) return country.caseFatalityRation / country.population;
         }
       }
     }
@@ -241,20 +235,21 @@ function Center({ countries, loc, worldMap }) {
       .attr("x", 20)
       .attr("y", 25);
 
-    const legendLinear = legend
-      .legendColor()
-      .shapeWidth(20)
-      .labelFormat(f)
-      .cells(10)
-      .orient("vertical")
-      .scale(colorScale);
+    const linear = d3.scaleLinear().domain([0, 10]).range(colorType);
 
     svg
       .append("g")
       .attr("class", "legendLinear")
-      .attr("transform", `translate(10,20)`)
-      .call(legendLinear);
+      .attr("transform", `translate(10,${height - 20})`);
 
+    const legendLinear = legend
+      .legendColor()
+      .shapeWidth(30)
+      .cells(10)
+      .orient("horizontal")
+      .scale(linear);
+
+    svg.select(".legendLinear").call(legendLinear);
   }, [dimensions, countries, selectedCountry, loc, value]);
 
   function TabPanel(props) {
