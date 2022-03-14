@@ -3,15 +3,15 @@ import * as d3 from "d3";
 
 function LineGraph({ jhuData, type, owi, loc }) {
   useEffect(() => {
-    if (type === "cases" && jhuData.length > 0) {
+    if (type == "cases" && jhuData.length > 0) {
       rollUpOwidLineGraph(jhuData, loc, type);
     }
 
-    if (type === "deaths" && jhuData.length > 0) {
+    if (type == "deaths" && jhuData.length > 0) {
       rollUpOwidLineGraph(jhuData, loc, type);
     }
 
-    if (type === "vaccines" && jhuData.length > 0) {
+    if (type == "vaccines" && jhuData.length > 0) {
       rollUpOwidLineGraph(jhuData, loc, type);
     }
   }, []);
@@ -60,16 +60,16 @@ function LineGraph({ jhuData, type, owi, loc }) {
     let graphType;
     let titleText;
 
-    if (type === "cases") {
+    if (type == "cases") {
       graphType = "#linegraph__" + type;
       titleText = "Infections";
-    } else if (type === "deaths") {
+    } else if (type == "deaths") {
       graphType = "#linegraph__" + type;
       titleText = "Deaths";
-    } else if (type === "vaccinations") {
+    } else if(type == "vaccines"){
       graphType = "#linegraph__" + type;
       titleText = "Vaccinations";
-    } else { console.log('no type available. Line:68 LineGraph.jsx'); }
+    } else { console.log('no type available)')};
 
     var div = d3.select(graphType);
 
@@ -90,7 +90,7 @@ function LineGraph({ jhuData, type, owi, loc }) {
       left: 70,
     };
 
-    if (type === "cases" || type === "deaths") {
+    if (type == "cases" || type == "deaths") {
       data.shift();
       data.shift();
       data.shift();
