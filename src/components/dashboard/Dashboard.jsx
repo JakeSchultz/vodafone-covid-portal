@@ -96,13 +96,13 @@ function Dashboard() {
         (d) => d.Country_Region
       );
 
-      const jhuInsidentRate = d3.rollup(
+      const jhuIncidentRate = d3.rollup(
         loadData[1],
         (v) => d3.sum(v, (d) => d.Incident_Rate),
         (d) => d.Country_Region
       );
 
-      const jhuCaseFatalityRation = d3.rollup(
+      const jhuCaseFatalityRatio = d3.rollup(
         loadData[1],
         (v) => d3.sum(v, (d) => d.Case_Fatality_Ratio),
         (d) => d.Country_Region
@@ -126,7 +126,7 @@ function Dashboard() {
         (d) => d.Country_Region
       );
 
-      const tempArr = [];
+      let tempArr = [];
 
       for (const [k, v] of jhuCases.entries()) {
         tempArr.push({
@@ -135,9 +135,9 @@ function Dashboard() {
           deaths: jhuDeaths.get(k),
           recovered: jhuRecovered.get(k),
           // Incident_Rate: Incidence Rate = cases per 100,000 persons.
-          insidentRate: jhuInsidentRate.get(k),
+          incidentRate: jhuIncidentRate.get(k),
           // Case_Fatality_Ratio (%): Case-Fatality Ratio (%) = Number recorded deaths / Number cases.
-          caseFatalityRation: jhuCaseFatalityRation.get(k),
+          caseFatalityRatio: jhuCaseFatalityRatio.get(k),
           dosesAdmin: jhuDosesAdministered.get(k),
           partiallyVacc: jhuPartiallyVaccinated.get(k),
           fullyVacc: jhuFullyVaccinated.get(k),
@@ -149,6 +149,9 @@ function Dashboard() {
           lat: loadData[5].find((d) => d.Country_Region === k).Lat,
         });
       }
+
+      //Filters out any "non-countries"
+      tempArr = tempArr.filter((d) => {return d.iso3 != ""});
 
       // setMapData(filteredData);
 
