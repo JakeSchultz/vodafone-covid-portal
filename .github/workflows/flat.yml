@@ -1,0 +1,43 @@
+name: data
+on:
+  schedule:
+    - cron: 0 0 * * *
+  workflow_dispatch: {}
+  push:
+    paths:
+      - .github/workflows/flat.yml
+jobs:
+  scheduled:
+    runs-on: ubuntu-latest
+    steps:
+      # Remove Get current date and everything below mkdir to open with flat config to add new sources
+      # or to add a postprocessing file
+      # postprocessing files should be in .js or .ts and be in the workflows directory
+      # opening with flat config will remove comments
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date -d yesterday '+%m-%d-%Y')"
+      - name: Setup deno
+        uses: denoland/setup-deno@main
+        with:
+          deno-version: v1.10.x
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Fetch data
+        uses: githubocto/flat@v3
+        with:
+          http_url: https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/vaccine_data_global.csv
+          downloaded_filename: vaccineDailyReport.csv
+      - name: Fetch data
+        uses: githubocto/flat@v3
+        with:
+          http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{steps.date.outputs.date }}.csv
+          downloaded_filename: jhu.csv
+      - run: mkdir -p ./src/data/ 
+      - run: mv *.csv ./src/data/
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with: 
+          commit_message: "[Bot] Update csv files."
+          commit_user_name: JakeSchultz
+          commit_user_email: jmschultz93@hotmail.com
+          commit_author: JakeSchultz <jmschultz93@hotmail.com>
