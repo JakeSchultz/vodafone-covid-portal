@@ -126,7 +126,7 @@ function Dashboard() {
         (d) => d.Country_Region
       );
 
-      const tempArr = [];
+      let tempArr = [];
 
       for (const [k, v] of jhuCases.entries()) {
         tempArr.push({
@@ -149,6 +149,9 @@ function Dashboard() {
           lat: loadData[5].find((d) => d.Country_Region === k).Lat,
         });
       }
+
+      //Filters out any "non-countries"
+      tempArr = tempArr.filter((d) => {return d.iso3 != ""});
 
       // setMapData(filteredData);
 

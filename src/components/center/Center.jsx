@@ -26,6 +26,7 @@ function Center({ countries, loc, worldMap }) {
   };
 
   useEffect(() => {
+    let last = d3.selection.prototype.last = function() {   return d3.select(this.nodes()[this.size() - 1]); };
     const svg = d3.select(svgRef.current);
 
     let { width, height } =
@@ -87,7 +88,6 @@ function Center({ countries, loc, worldMap }) {
       colorType = colorRange[4];
       f = d3.format("0.1f");
     }
-    //filters out the U.S.
 
     const minType = d3.min(countries, (d) => {
       if (value == 0) {
@@ -101,11 +101,11 @@ function Center({ countries, loc, worldMap }) {
         return d.dosesAdmin;
       }
       if (value == 3) {
-        return (d.cases / d.population) * 100000;
+        return (d.cases / d.population) * 100000;  
       }
 
       if (value == 4) {
-        return (d.deaths/d.cases) * 100;
+        return (d.deaths/d.cases) * 100;;
       }
     });
 
@@ -134,6 +134,7 @@ function Center({ countries, loc, worldMap }) {
 
     function getCountryValue(iso3) {
       const country = countries.find((c) => c.iso3 == iso3);
+
       if (country != undefined) {
         // const another = countries.find((c) => c.country == country.location);
         if (value == 0) {
@@ -241,19 +242,39 @@ function Center({ countries, loc, worldMap }) {
       .attr("x", 20)
       .attr("y", 25);
 
-    const legendLinear = legend
+    const linear = d3.scaleLinear().domain([0, 10]).range(colorType);
+
+      const legendLinear = legend
       .legendColor()
       .shapeWidth(20)
-      .labelFormat(f)
       .cells(10)
       .orient("vertical")
       .scale(colorScale);
 
-    svg
+      svg
       .append("g")
       .attr("class", "legendLinear")
       .attr("transform", `translate(10,20)`)
       .call(legendLinear);
+
+    //get legendCells
+    const legendCells = svg.selectAll("g.legendCells").last();
+
+    //get labels of legendCells
+    const labels = legendCells.selectAll("text.label");
+
+    //Iterate through each value and adjust formatting
+    labels.each(function(d,i) {
+      let label = d3.select(this);
+      let t = label.text();
+
+      if(parseFloat(t) <= 1){
+        label.text("<= 1");
+      }else{
+      label.text(f(t).replace("G", "B"));
+      }
+
+    });
 
   }, [dimensions, countries, selectedCountry, loc, value]);
 
