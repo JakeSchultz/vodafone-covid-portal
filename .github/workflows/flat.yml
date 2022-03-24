@@ -1,7 +1,7 @@
 name: data
 on:
   schedule:
-    - cron: 0 0 6 * *
+    - cron: 0 6 * * *
   workflow_dispatch: {}
   push:
     paths:
@@ -35,8 +35,8 @@ jobs:
           downloaded_filename: jhu.csv
       - run: mkdir -p ./src/data/
       - run: rm ./src/data/*.csv
-      - run: git pull --rebase
       - run: mv -f *.csv ./src/data/
+      - run: git pull --rebase
       - uses: stefanzweifel/git-auto-commit-action@v4
         with: 
           commit_message: "[Bot] Update csv files."
