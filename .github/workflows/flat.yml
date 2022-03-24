@@ -1,7 +1,7 @@
 name: data
 on:
   schedule:
-    - cron: 0 0 * * *
+    - cron: 0 0 6 * *
   workflow_dispatch: {}
   push:
     paths:
@@ -30,7 +30,7 @@ jobs:
           downloaded_filename: vaccineDailyReport.csv
       - name: Fetch data
         uses: githubocto/flat@v3
-        with:
+        with:       
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{steps.date.outputs.date}}.csv
           downloaded_filename: jhu.csv
       - run: mkdir -p ./src/data/ 
