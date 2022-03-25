@@ -40,7 +40,7 @@ jobs:
       - name: Add & Commit vaccine Daily Report
         uses: EndBug/add-and-commit@v9.0.0
         with:  
-          add: .
+          add: . --force
           author_name: JakeSchultz
           author_email: jmschultz93@hotmail.com
           commit: --signoff
@@ -60,7 +60,7 @@ jobs:
           message: 'Updated vaccineDailyReport.csv'
           pathspec_error_handling: ignore
           
-          push: true
+          push: --force
 #       - name: Add & Commit jhu
 #         uses: EndBug/add-and-commit@v9.0.0
 #         with:  
