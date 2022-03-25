@@ -35,7 +35,7 @@ jobs:
           downloaded_filename: jhu.csv
       - run: mkdir -p ./src/data/
       - run: rm ./src/data/*.csv
-      - run: mv -f *.csv ./src/data/
+      
       
       - name: Add & Commit vaccine Daily Report
         uses: EndBug/add-and-commit@v9.0.0
@@ -47,6 +47,19 @@ jobs:
           message: 'Updated vaccineDailyReport.csv'
           pathspec_error_handling: ignore
 #          pull: '--rebase'
+          push: true
+      - run: mv -f *.csv ./src/data/
+      - name: move vaccine Daily Report
+        uses: EndBug/add-and-commit@v9.0.0
+        with:
+          pull: '--rebase'
+          add: .
+          author_name: JakeSchultz
+          author_email: jmschultz93@hotmail.com
+          commit: --signoff
+          message: 'Updated vaccineDailyReport.csv'
+          pathspec_error_handling: ignore
+          
           push: true
 #       - name: Add & Commit jhu
 #         uses: EndBug/add-and-commit@v9.0.0
