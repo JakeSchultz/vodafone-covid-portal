@@ -36,10 +36,33 @@ jobs:
       - run: mkdir -p ./src/data/
       - run: rm ./src/data/*.csv
       - run: mv -f *.csv ./src/data/
-      - run: git pull --rebase
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with: 
-          commit_message: "[Bot] Update csv files."
-          commit_user_name: JakeSchultz
-          commit_user_email: jmschultz93@hotmail.com
-          commit_author: JakeSchultz <jmschultz93@hotmail.com>
+      
+      - name: Add & Commit vaccine Daily Report
+        uses: EndBug/add-and-commit@v9.0.0
+        with:  
+          add: 'vaccineDailyReport.csv'
+          author_name: JakeSchultz
+          author_email: jmschultz93@hotmail.com
+          commit: --signoff
+          message: 'Updated vaccineDailyReport.csv'
+          pathspec_error: ignore
+          pull: '--rebase'
+          push: true
+      - name: Add & Commit jhu
+        uses: EndBug/add-and-commit@v9.0.0
+        with:  
+          add: 'jhu.csv'
+          author_name: JakeSchultz
+          author_email: jmschultz93@hotmail.com
+          commit: --signoff
+          message: 'Updated jhu.csv'
+          pathspec_error: ignore
+          pull: '--rebase'
+          push: true
+          
+      # - uses: stefanzweifel/git-auto-commit-action@v4
+      #  with: 
+      #    commit_message: "[Bot] Update csv files."
+      #    commit_user_name: JakeSchultz
+      #    commit_user_email: jmschultz93@hotmail.com
+      #    commit_author: JakeSchultz <jmschultz93@hotmail.com>
