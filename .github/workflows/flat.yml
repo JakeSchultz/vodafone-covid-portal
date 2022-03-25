@@ -45,7 +45,7 @@ jobs:
           author_email: jmschultz93@hotmail.com
           commit: --signoff
           message: 'Updated vaccineDailyReport.csv'
-          pathspec_error: ignore
+          pathspec_error_handling: ignore
           pull: '--rebase'
           push: true
       - name: Add & Commit jhu
@@ -56,7 +56,7 @@ jobs:
           author_email: jmschultz93@hotmail.com
           commit: --signoff
           message: 'Updated jhu.csv'
-          pathspec_error: ignore
+          pathspec_error_handling: ignore
           pull: '--rebase'
           push: true
           
