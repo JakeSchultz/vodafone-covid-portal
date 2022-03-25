@@ -46,7 +46,7 @@ jobs:
           commit: --signoff
           message: 'Updated vaccineDailyReport.csv'
           pathspec_error_handling: ignore
-          pull: '--rebase'
+#          pull: '--rebase'
           push: true
 #       - name: Add & Commit jhu
 #         uses: EndBug/add-and-commit@v9.0.0
