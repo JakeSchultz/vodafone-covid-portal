@@ -52,7 +52,7 @@ jobs:
       - name: move vaccine Daily Report
         uses: EndBug/add-and-commit@v9.0.0
         with:
-          pull: '--rebase'
+          #pull: '--rebase'
           add: .
           author_name: JakeSchultz
           author_email: jmschultz93@hotmail.com
