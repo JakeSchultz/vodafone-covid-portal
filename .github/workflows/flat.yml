@@ -70,21 +70,16 @@ jobs:
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
           # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
           downloaded_filename: jhu.csv
-      - name: Make ./src/data/ directory 
-        run: mkdir -pv ./src/data/
-      - run: touch ./src/data/.gitkeep
-      
+      # - name: Make ./src/data/ directory 
+      #   run: mkdir -pv ./src/data/
+      # - run: touch ./src/data/.gitkeep
        
-      - name: Commit daily csv file updates
-        run: |
-          git config --global user.name 'JakeSchultz'
-          git config --global user.email 'JakeSchultz@users.noreply.github.com'
-          git add --all
-          git status
-          git commit -am "Automated daily data updates"
-          git pull --rebase
-          git rebase --reapply-cherry-picks
-          git push 
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with: 
+          commit_message: "[Bot] Update csv files."
+          commit_user_name: JakeSchultz
+          commit_user_email: JakeSchultz@users.noreply.github.com
+          commit_author: JakeSchultz <JakeSchultz@users.noreply.github.com>
 # Moving csv files into data directory
   movecsv:
     if: always()
@@ -141,9 +136,4 @@ jobs:
 #           pull: '--rebase'
 #           push: true
           
-      # - uses: stefanzweifel/git-auto-commit-action@v4
-      #  with: 
-      #    commit_message: "[Bot] Update csv files."
-      #    commit_user_name: JakeSchultz
-      #    commit_user_email: jmschultz93@hotmail.com
-      #    commit_author: JakeSchultz <jmschultz93@hotmail.com>
+
