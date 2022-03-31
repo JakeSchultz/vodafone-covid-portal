@@ -35,8 +35,10 @@ jobs:
           # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
           downloaded_filename: jhu.csv
-      - run: mkdir -p ./src/data/
-      - run: mv -f *.csv ./src/data/
+      - name: Make ./src/data/ directory 
+        run: mkdir -p ./src/data/
+      - name: Move all csv files in root directory into ./src/data/
+        run: mv -f *.csv ./src/data/
       
       - name: Commit daily csv file updates
         run: |
