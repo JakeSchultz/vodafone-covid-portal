@@ -37,31 +37,40 @@ jobs:
           downloaded_filename: jhu.csv
 
       
+      - name: Commit daily csv file updates
+        run: |
+          git pull --rebase
+          git config --global user.name 'JakeSchultz'
+          git config --global user.email 'JakeSchultz@users.noreply.github.com'
+          git commit -am "Automated daily data updates"
+          git push
+
+
       
-      - name: Add & Commit vaccine Daily Report
-        uses: EndBug/add-and-commit@v9.0.0
-        with:  
-          add: . --force
-          author_name: JakeSchultz
-          author_email: jmschultz93@hotmail.com
-          commit: --signoff
-          message: 'Updated vaccineDailyReport.csv'
-          pathspec_error_handling: ignore
-#          pull: '--rebase'
-          push: true
-      - run: mv -f *.csv ./src/data/
-      - name: move vaccine Daily Report
-        uses: EndBug/add-and-commit@v9.0.0
-        with:
-          #pull: '--rebase'
-          add: .
-          author_name: JakeSchultz
-          author_email: jmschultz93@hotmail.com
-          commit: --signoff
-          message: 'Updated vaccineDailyReport.csv'
-          pathspec_error_handling: ignore
+#       - name: Add & Commit vaccine Daily Report
+#         uses: EndBug/add-and-commit@v9.0.0
+#         with:  
+#           add: . --force
+#           author_name: JakeSchultz
+#           author_email: jmschultz93@hotmail.com
+#           commit: --signoff
+#           message: 'Updated vaccineDailyReport.csv'
+#           pathspec_error_handling: ignore
+# #          pull: '--rebase'
+#           push: true
+#       - run: mv -f *.csv ./src/data/
+#       - name: move vaccine Daily Report
+#         uses: EndBug/add-and-commit@v9.0.0
+#         with:
+#           #pull: '--rebase'
+#           add: .
+#           author_name: JakeSchultz
+#           author_email: jmschultz93@hotmail.com
+#           commit: --signoff
+#           message: 'Updated vaccineDailyReport.csv'
+#           pathspec_error_handling: ignore
           
-          push: --force
+#           push: --force
 #       - name: Add & Commit jhu
 #         uses: EndBug/add-and-commit@v9.0.0
 #         with:  
