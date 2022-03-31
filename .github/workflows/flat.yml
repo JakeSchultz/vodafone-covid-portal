@@ -20,7 +20,7 @@ jobs:
           git config --global user.email 'JakeSchultz@users.noreply.github.com'
           git commit -am "Automated prepwork"
           git pull --rebase
-          git rebase --reapply-cherry-picks
+          git rebase
           git push
 
   dataCollection:
