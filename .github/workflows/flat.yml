@@ -77,7 +77,7 @@ jobs:
           git config --global user.email 'JakeSchultz@users.noreply.github.com'
           git commit -am "Automated daily data updates"
           git pull --rebase
-          git rebase --reapply-cherry-picks
+          git rebase
           git push 
       
 #       - name: Add & Commit vaccine Daily Report
