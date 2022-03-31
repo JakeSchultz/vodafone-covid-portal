@@ -70,6 +70,7 @@ jobs:
           git push 
 # Moving csv files into data directory
   movecsv:
+    if: always()
     needs: dataCollection
     runs-on: ubuntu-latast
     steps:
