@@ -1,7 +1,7 @@
 name: data
 on:
   schedule:
-    - cron: 0 6 * * *
+    - cron: 5 6 * * *
   workflow_dispatch: {}
   push:
     paths:
@@ -14,8 +14,6 @@ jobs:
       # or to add a postprocessing file
       # postprocessing files should be in .js or .ts and be in the workflows directory
       # opening with flat config will remove comments
-      - name: Prep
-        run: mkdir -p ./src/data/ ; rm -f ./src/data/*.csv
       - name: Get yesterday's date
         id: date
         run: echo "::set-output name=date::$(date -d 'yesterday' +'%m-%d-%Y')"

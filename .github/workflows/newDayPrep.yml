@@ -1,0 +1,27 @@
+name: data
+on:
+  schedule:
+    - cron: 0 6 * * *
+  workflow_dispatch: {}
+  push:
+    paths:
+      - .github/workflows/newDayPrep.yml
+jobs:
+  scheduled:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@v2
+    - name: Prep
+      run: mkdir -p ./src/data/ ; rm -f ./src/data/*.csv
+      - name: Add & Commit vaccine Daily Report
+        uses: EndBug/add-and-commit@v9.0.0
+        with:  
+          add: . --force
+          author_name: JakeSchultz
+          author_email: jmschultz93@hotmail.com
+          commit: --signoff
+          message: 'removed yesterday's data...Prepping for new data'
+          pathspec_error_handling: ignore
+#          pull: '--rebase'
+          push: true
