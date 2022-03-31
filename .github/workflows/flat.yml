@@ -7,6 +7,22 @@ on:
     paths:
       - .github/workflows/flat.yml
 jobs:
+  pre_job:
+    # continue-on-error: true # Uncomment once integration is finished
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          # All of these options are optional, so you can remove them if you are happy with the defaults
+          concurrent_skipping: 'never'
+          skip_after_successful_duplicate: 'true'
+          paths_ignore: '["**/README.md", "**/docs/**"]'
+          do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
+
   # prep:
   #   runs-on: ubuntu-latest
   #   steps:
@@ -26,6 +42,7 @@ jobs:
   #         git push
   dataCollection:
     # needs: prep
+    needs: pre_job
     runs-on: ubuntu-latest
     steps:
       # Remove Get current date and everything below mkdir to open with flat config to add new sources
@@ -50,8 +67,8 @@ jobs:
       - name: Fetch data
         uses: githubocto/flat@v3
         with:       
-          # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
-          http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
+          http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
+          # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
           downloaded_filename: jhu.csv
       - name: Make ./src/data/ directory 
         run: mkdir -pv ./src/data/
