@@ -19,6 +19,8 @@ jobs:
           git config --global user.name 'JakeSchultz'
           git config --global user.email 'JakeSchultz@users.noreply.github.com'
           git commit -am "Automated prepwork"
+          git pull --rebase
+          git rebase --reapply-cherry-picks
           git push
 
   dataCollection:
@@ -74,7 +76,8 @@ jobs:
           git config --global user.name 'JakeSchultz'
           git config --global user.email 'JakeSchultz@users.noreply.github.com'
           git commit -am "Automated daily data updates"
-          git merge --strategy-option ours
+          git pull --rebase
+          git rebase --reapply-cherry-picks
           git push 
       
 #       - name: Add & Commit vaccine Daily Report
