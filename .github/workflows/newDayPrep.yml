@@ -10,10 +10,10 @@ jobs:
   scheduled:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out repo
-      uses: actions/checkout@v2
-    - name: Prep
-      run: mkdir -p ./src/data/ ; rm -f ./src/data/*.csv
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Prep
+        run: mkdir -p ./src/data/ ; rm -f ./src/data/*.csv
       - name: Add & Commit vaccine Daily Report
         uses: EndBug/add-and-commit@v9.0.0
         with:  
