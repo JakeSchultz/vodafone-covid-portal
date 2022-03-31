@@ -13,7 +13,7 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v2
       - name: Prep
-        run: mkdir -p ./src/data/ ; rm -f ./src/data/*.csv
+        run: rm -f ./src/data/*.csv
       - name: Commit daily Prep work
         run: |
           git config --global user.name 'JakeSchultz'
