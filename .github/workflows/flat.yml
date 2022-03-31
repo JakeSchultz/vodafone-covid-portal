@@ -15,8 +15,7 @@ jobs:
       # postprocessing files should be in .js or .ts and be in the workflows directory
       # opening with flat config will remove comments
       - name: Prep
-        run: mkdir -p ./src/data/
-        run: rm -f ./src/data/*.csv
+        run: mkdir -p ./src/data/ | rm -f ./src/data/*.csv
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date -d yesterday '+%m-%d-%Y')"
