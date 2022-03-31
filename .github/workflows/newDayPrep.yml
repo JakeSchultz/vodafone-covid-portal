@@ -7,7 +7,7 @@ on:
     paths:
       - .github/workflows/newDayPrep.yml
 jobs:
-  scheduled:
+  prep:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo

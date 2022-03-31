@@ -7,7 +7,22 @@ on:
     paths:
       - .github/workflows/flat.yml
 jobs:
-  scheduled:
+  prep:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Prep
+        run: rm -f ./src/data/*.csv ; rm -f *.csv
+      - name: Commit daily Prep work
+        run: |
+          git config --global user.name 'JakeSchultz'
+          git config --global user.email 'JakeSchultz@users.noreply.github.com'
+          git commit -am "Automated prepwork"
+          git push
+
+  dataCollection:
+    needs: prep
     runs-on: ubuntu-latest
     steps:
       # Remove Get current date and everything below mkdir to open with flat config to add new sources
