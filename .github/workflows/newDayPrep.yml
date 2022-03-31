@@ -14,13 +14,19 @@ jobs:
         uses: actions/checkout@v2
       - name: Prep
         run: mkdir -p ./src/data/ ; rm -f ./src/data/*.csv
-      - name: Add & Commit prepping for new day
-        uses: EndBug/add-and-commit@v9.0.0
-          with:
-            add: . --force
-            author_name: JakeSchultz
-            author_email: jmschultz93@hotmail.com
-            commit: --signoff
-            message: 'removed yesterday's data...Prepping for new data'
-            pathspec_error_handling: ignore
-            push: true
+      - name: Commit daily Prep work
+        run: |
+          git config --global user.name 'JakeSchultz'
+          git config --global user.email 'JakeSchultz@users.noreply.github.com'
+          git commit -am "Automated prepwork"
+          git push
+      # - name: Add & Commit prepping for new day
+      #   uses: EndBug/add-and-commit@v9.0.0
+      #     with:
+      #       add: . --force
+      #       author_name: JakeSchultz
+      #       author_email: jmschultz93@hotmail.com
+      #       commit: --signoff
+      #       message: 'removed yesterday's data...Prepping for new data'
+      #       pathspec_error_handling: ignore
+      #       push: true
