@@ -16,9 +16,9 @@ jobs:
       # opening with flat config will remove comments
       - name: Prep
         run: mkdir -p ./src/data/ ; rm -f ./src/data/*.csv
-      - name: Get today's date
+      - name: Get yesterday's date
         id: date
-        run: echo "::set-output name=date::$(date +'%m-%d-%Y')"
+        run: echo "::set-output name=date::$(date -d 'yesterday' +'%m-%d-%Y')"
       - run: echo ${{ steps.date.outputs.date }}
       - name: Setup deno
         uses: denoland/setup-deno@main
@@ -34,7 +34,8 @@ jobs:
       - name: Fetch data
         uses: githubocto/flat@v3
         with:       
-          http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
+          # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
+          http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
           downloaded_filename: jhu.csv
 
       
