@@ -59,7 +59,8 @@ jobs:
           commit_user_name: JakeSchultz
           commit_user_email: JakeSchultz@users.noreply.github.com
           commit_author: JakeSchultz <JakeSchultz@users.noreply.github.com>
-          commit_options: '--allow-empty --renormalize'
+          commit_options: '--allow-empty'
+          add_options: '--renormalize'
           file_pattern: src/data/*.csv *.csv
 # Moving csv files into data directory
   movecsv:
@@ -76,7 +77,7 @@ jobs:
         run: |
           git config --global user.name 'JakeSchultz'
           git config --global user.email 'JakeSchultz@users.noreply.github.com'
-          git commit --allow-empty --renormalize -m "Automated daily data updates"
+          git commit --allow-empty -m "Automated daily data updates"
           git status
           git pull --rebase
           git rebase
