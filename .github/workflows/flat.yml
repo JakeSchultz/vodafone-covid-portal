@@ -18,8 +18,8 @@ jobs:
         run: mkdir -p ./src/data/ ; rm -f ./src/data/*.csv
       - name: Get yesterday's date
         id: date
-        run: echo "::set-output name=date::$(date -d yesterday '+%m-%d-%Y')"
-      - run: echo 
+        run: echo "::set-output name=date::$(date --date="yesterday" +"%m-%d-%Y")"
+      - run: echo $date
       - name: Setup deno
         uses: denoland/setup-deno@main
         with:
