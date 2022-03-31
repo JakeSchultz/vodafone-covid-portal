@@ -24,9 +24,8 @@ jobs:
   #         git pull --rebase
   #         git rebase
   #         git push
-
   dataCollection:
-    needs: prep
+    # needs: prep
     runs-on: ubuntu-latest
     steps:
       # Remove Get current date and everything below mkdir to open with flat config to add new sources
