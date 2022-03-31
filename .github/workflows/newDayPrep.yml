@@ -16,7 +16,7 @@ jobs:
         run: mkdir -p ./src/data/ ; rm -f ./src/data/*.csv
       - name: Add & Commit prepping for new day
         uses: EndBug/add-and-commit@v9.0.0
-        with:  
+        with:
           add: . --force
           author_name: JakeSchultz
           author_email: jmschultz93@hotmail.com
