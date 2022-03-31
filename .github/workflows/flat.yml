@@ -43,8 +43,7 @@ jobs:
           git config --global user.name 'JakeSchultz'
           git config --global user.email 'JakeSchultz@users.noreply.github.com'
           git commit -am "Automated daily data updates"
-          git pull --rebase
-          git rebase --reapply-cherry-picks
+          git merge --strategy-option ours
           git push 
 
 
