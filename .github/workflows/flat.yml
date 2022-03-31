@@ -48,7 +48,9 @@ jobs:
           git pull --rebase
           git rebase --reapply-cherry-picks
           git push 
-
+# Moving csv files into data directory
+      - name: Check out repo
+        uses: actions/checkout@v2
       - name: Move all csv files in root directory into ./src/data/
         run: mv -fv *.csv ./src/data/
 
