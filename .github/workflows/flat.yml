@@ -23,25 +23,7 @@ jobs:
           paths_ignore: '["**/README.md", "**/docs/**"]'
           do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
 
-  # prep:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Check out repo
-  #       uses: actions/checkout@v2
-  #     - name: Prep
-  #       run: | 
-  #         rm -f ./src/data/*.csv
-  #         rm -f *.csv
-  #     - name: Commit daily Prep work
-  #       run: |
-  #         git config --global user.name 'JakeSchultz'
-  #         git config --global user.email 'JakeSchultz@users.noreply.github.com'
-  #         git commit -am "Automated prepwork"
-  #         git pull --rebase
-  #         git rebase
-  #         git push
   dataCollection:
-    # needs: prep
     needs: pre_job
     runs-on: ubuntu-latest
     steps:
@@ -70,9 +52,6 @@ jobs:
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
           # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
           downloaded_filename: jhu.csv
-      # - name: Make ./src/data/ directory 
-      #   run: mkdir -pv ./src/data/
-      # - run: touch ./src/data/.gitkeep
        
       - uses: stefanzweifel/git-auto-commit-action@v4
         with: 
@@ -98,42 +77,4 @@ jobs:
           git commit -am "Automated daily data updates"
           git pull --rebase
           git rebase
-          git push 
-      
-#       - name: Add & Commit vaccine Daily Report
-#         uses: EndBug/add-and-commit@v9.0.0
-#         with:  
-#           add: . --force
-#           author_name: JakeSchultz
-#           author_email: jmschultz93@hotmail.com
-#           commit: --signoff
-#           message: 'Updated vaccineDailyReport.csv'
-#           pathspec_error_handling: ignore
-# #          pull: '--rebase'
-#           push: true
-#       - run: mv -f *.csv ./src/data/
-#       - name: move vaccine Daily Report
-#         uses: EndBug/add-and-commit@v9.0.0
-#         with:
-#           #pull: '--rebase'
-#           add: .
-#           author_name: JakeSchultz
-#           author_email: jmschultz93@hotmail.com
-#           commit: --signoff
-#           message: 'Updated vaccineDailyReport.csv'
-#           pathspec_error_handling: ignore
-          
-#           push: --force
-#       - name: Add & Commit jhu
-#         uses: EndBug/add-and-commit@v9.0.0
-#         with:  
-#           add: 'jhu.csv'
-#           author_name: JakeSchultz
-#           author_email: jmschultz93@hotmail.com
-#           commit: --signoff
-#           message: 'Updated jhu.csv'
-#           pathspec_error_handling: ignore
-#           pull: '--rebase'
-#           push: true
-          
-
+          git push
