@@ -36,8 +36,8 @@ jobs:
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
           downloaded_filename: jhu.csv
       - name: Make ./src/data/ directory 
-        run: mkdir -p ./src/data/
-      - run: touch ./src/data/.gitkeep
+        run: mkdir -pv ./src/data/
+      - run: touch -v ./src/data/.gitkeep
       
       
       - name: Commit daily csv file updates
@@ -50,7 +50,7 @@ jobs:
           git push 
 
       - name: Move all csv files in root directory into ./src/data/
-        run: mv -f *.csv ./src/data/
+        run: mv -fv *.csv ./src/data/
 
       - name: Commit daily csv file updates
         run: |
