@@ -37,6 +37,7 @@ jobs:
           downloaded_filename: jhu.csv
       - name: Make ./src/data/ directory 
         run: mkdir -p ./src/data/
+      - run: touch ./src/data/.gitkeep
       
       
       - name: Commit daily csv file updates
@@ -44,7 +45,8 @@ jobs:
           git config --global user.name 'JakeSchultz'
           git config --global user.email 'JakeSchultz@users.noreply.github.com'
           git commit -am "Automated daily data updates"
-          git merge --strategy-option ours
+          git pull --rebase
+          git rebase --reapply-cherry-picks
           git push 
 
       - name: Move all csv files in root directory into ./src/data/
