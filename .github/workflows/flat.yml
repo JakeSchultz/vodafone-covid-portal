@@ -68,13 +68,14 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v2
       - name: Move all csv files in root directory into ./src/data/
-        run: mv -fv ./*.csv ./src/data/
+        run: git mv -fv ./*.csv ./src/data/
 
       - name: Commit daily csv file updates
         run: |
           git config --global user.name 'JakeSchultz'
           git config --global user.email 'JakeSchultz@users.noreply.github.com'
-          git commit -am "Automated daily data updates"
+          git commit -m "Automated daily data updates"
+          git status
           git pull --rebase
           git rebase
           git push
