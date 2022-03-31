@@ -82,7 +82,6 @@ jobs:
           commit_author: JakeSchultz <JakeSchultz@users.noreply.github.com>
 # Moving csv files into data directory
   movecsv:
-    if: always()
     needs: dataCollection
     runs-on: ubuntu-latast
     steps:
