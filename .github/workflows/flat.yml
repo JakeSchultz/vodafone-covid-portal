@@ -19,7 +19,7 @@ jobs:
       - name: Get yesterday's date
         id: date
         run: echo "::set-output name=date::$(date --date="yesterday" +"%m-%d-%Y")"
-      - run: echo $date
+      - run: echo ${{ steps.date.outputs.date }}
       - name: Setup deno
         uses: denoland/setup-deno@main
         with:
