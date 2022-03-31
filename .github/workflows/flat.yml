@@ -37,7 +37,7 @@ jobs:
           downloaded_filename: jhu.csv
       - name: Make ./src/data/ directory 
         run: mkdir -pv ./src/data/
-      - run: touch -v ./src/data/.gitkeep
+      - run: touch ./src/data/.gitkeep
       
       
       - name: Commit daily csv file updates
