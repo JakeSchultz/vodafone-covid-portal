@@ -57,7 +57,7 @@ jobs:
         run: mkdir -pv ./src/data/
       - run: touch ./src/data/.gitkeep
       
-      
+       
       - name: Commit daily csv file updates
         run: |
           git config --global user.name 'JakeSchultz'
