@@ -37,8 +37,7 @@ jobs:
           downloaded_filename: jhu.csv
       - name: Make ./src/data/ directory 
         run: mkdir -p ./src/data/
-      - name: Move all csv files in root directory into ./src/data/
-        run: mv -f *.csv ./src/data/
+      
       
       - name: Commit daily csv file updates
         run: |
@@ -48,7 +47,16 @@ jobs:
           git merge --strategy-option ours
           git push 
 
+      - name: Move all csv files in root directory into ./src/data/
+        run: mv -f *.csv ./src/data/
 
+      - name: Commit daily csv file updates
+        run: |
+          git config --global user.name 'JakeSchultz'
+          git config --global user.email 'JakeSchultz@users.noreply.github.com'
+          git commit -am "Automated daily data updates"
+          git merge --strategy-option ours
+          git push 
       
 #       - name: Add & Commit vaccine Daily Report
 #         uses: EndBug/add-and-commit@v9.0.0
