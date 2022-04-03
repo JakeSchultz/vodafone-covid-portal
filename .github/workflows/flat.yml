@@ -60,8 +60,8 @@ jobs:
           commit_user_email: JakeSchultz@users.noreply.github.com
           commit_author: JakeSchultz <JakeSchultz@users.noreply.github.com>
           commit_options: '--allow-empty'
-         
-          push_options: 'origin main --force'
+          add_options: '--all'
+          push_options: '-u origin main --force'
           file_pattern: src/data/*.csv *.csv
 # Moving csv files into data directory
   movecsv:
