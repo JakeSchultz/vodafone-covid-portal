@@ -60,7 +60,7 @@ jobs:
           commit_user_email: JakeSchultz@users.noreply.github.com
           commit_author: JakeSchultz <JakeSchultz@users.noreply.github.com>
           commit_options: '--allow-empty'
-          add_options: '--renormalize'
+         
           push_options: 'origin main --force'
           file_pattern: src/data/*.csv *.csv
 # Moving csv files into data directory
@@ -83,3 +83,8 @@ jobs:
           git pull --rebase
           git rebase ours
           git push origin main --force
+
+
+# Stefanzweifel additional options
+# paste into the stefanzweifel section
+#  add_options: '--renormalize'
