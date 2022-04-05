@@ -27,10 +27,7 @@ jobs:
     needs: pre_job
     runs-on: ubuntu-latest
     steps:
-      # Remove Get current date and everything below mkdir to open with flat config to add new sources
-      # or to add a postprocessing file
-      # postprocessing files should be in .js or .ts and be in the workflows directory
-      # opening with flat config will remove comments
+
       - name: Get yesterday's date
         id: date
         run: echo "::set-output name=date::$(date -d 'yesterday' +'%m-%d-%Y')"
