@@ -53,18 +53,18 @@ jobs:
           # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
           downloaded_filename: jhu.csv
        
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with: 
-          commit_message: "[Bot] Update csv files."
-          commit_user_name: JakeSchultz
-          commit_user_email: JakeSchultz@users.noreply.github.com
-          commit_author: JakeSchultz <JakeSchultz@users.noreply.github.com>
-          commit_options: '--allow-empty'
-          # pull_options will throw a warning but now the workflow seems to be working will verify tomorrow
-          pull_options: '-s recursive -X ours'
-          add_options: '--force'
-          push_options: '-u --force'
-          file_pattern: '*.csv'
+      # - uses: stefanzweifel/git-auto-commit-action@v4
+      #   with: 
+      #     commit_message: "[Bot] Update csv files."
+      #     commit_user_name: JakeSchultz
+      #     commit_user_email: JakeSchultz@users.noreply.github.com
+      #     commit_author: JakeSchultz <JakeSchultz@users.noreply.github.com>
+      #     commit_options: '--allow-empty'
+      #     # pull_options will throw a warning but now the workflow seems to be working will verify tomorrow
+      #     pull_options: '-s recursive -X ours'
+      #     add_options: '--force'
+      #     push_options: '-u --force'
+      #     file_pattern: '*.csv'
 # Moving csv files into data directory
   movecsv:
     if: always()
