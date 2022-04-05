@@ -60,7 +60,7 @@ jobs:
           commit_user_email: JakeSchultz@users.noreply.github.com
           commit_author: JakeSchultz <JakeSchultz@users.noreply.github.com>
           commit_options: '--allow-empty'
-          add_options: '--force --renormalize'
+          add_options: '--force'
           push_options: '-u origin main --force'
           file_pattern: '*.csv'
 # Moving csv files into data directory
@@ -81,8 +81,9 @@ jobs:
           git commit --allow-empty -m "Automated daily data updates"
           git status
           git add .
-          git pull --rebase
-          git rebase ours
+          git status
+          git merge -s ours
+          git status
           git push origin main --force
 
 
