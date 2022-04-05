@@ -62,7 +62,7 @@ jobs:
           commit_options: '--allow-empty'
           add_options: '--force --renormalize'
           push_options: '-u origin main --force'
-          file_pattern: src/data/*.csv *.csv
+          file_pattern: *.csv
 # Moving csv files into data directory
   movecsv:
     if: always()
