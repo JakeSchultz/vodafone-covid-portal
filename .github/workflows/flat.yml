@@ -27,7 +27,6 @@ jobs:
     needs: pre_job
     runs-on: ubuntu-latest
     steps:
-
       - name: Get yesterday's date
         id: date
         run: echo "::set-output name=date::$(date -d 'yesterday' +'%m-%d-%Y')"
@@ -49,14 +48,14 @@ jobs:
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
           # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
           downloaded_filename: jhu.csv
-       - name: push local commits
-         run: |
-           git config --global user.name 'JakeSchultz'
-           git config --global user.email 'JakeSchultz@users.noreply.github.com'
-           git add .
-           git commit --allow-empty -m "Automated daily data updates p1"
-           git merge -s ours
-           git push origin main --force
+      - name: push local commits
+        run: |
+          git config --global user.name 'JakeSchultz'
+          git config --global user.email 'JakeSchultz@users.noreply.github.com'
+          git add .
+          git commit --allow-empty -m "Automated daily data updates p1"
+          git merge -s ours
+          git push origin main --force
       # - uses: stefanzweifel/git-auto-commit-action@v4
       #   with: 
       #     commit_message: "[Bot] Update csv files."
