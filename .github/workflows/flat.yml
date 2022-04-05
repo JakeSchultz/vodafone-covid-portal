@@ -80,6 +80,7 @@ jobs:
           git config --global user.email 'JakeSchultz@users.noreply.github.com'
           git commit --allow-empty -m "Automated daily data updates"
           git status
+          git add .
           git pull --rebase
           git rebase ours
           git push origin main --force
