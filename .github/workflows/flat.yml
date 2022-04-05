@@ -73,6 +73,9 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v2
+      - name: Pull from origin
+        run: git pull origin 
+      
       - name: Move all csv files in root directory into ./src/data/
         run: git mv -fv ./*.csv ./src/data/
 
