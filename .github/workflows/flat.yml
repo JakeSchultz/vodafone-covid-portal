@@ -60,6 +60,7 @@ jobs:
           commit_user_email: JakeSchultz@users.noreply.github.com
           commit_author: JakeSchultz <JakeSchultz@users.noreply.github.com>
           commit_options: '--allow-empty'
+          pull_options: '-s recursive -X ours'
           add_options: '--force'
           push_options: '-u --force'
           file_pattern: '*.csv'
