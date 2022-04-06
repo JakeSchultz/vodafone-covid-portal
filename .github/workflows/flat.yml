@@ -1,22 +1,40 @@
 name: data
 on:
   schedule:
-    - cron: 0 0 * * *
+    - cron: 5 8 * * *
   workflow_dispatch: {}
   push:
     paths:
       - .github/workflows/flat.yml
 jobs:
-  scheduled:
+  pre_job:
+    continue-on-error: true # Uncomment once integration is finished
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          # All of these options are optional, so you can remove them if you are happy with the defaults
+          concurrent_skipping: 'never'
+          skip_after_successful_duplicate: 'true'
+          paths_ignore: '["**/README.md", "**/docs/**"]'
+          do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
+
+  dataCollection:
+    needs: pre_job
     runs-on: ubuntu-latest
     steps:
       # Remove Get current date and everything below mkdir to open with flat config to add new sources
       # or to add a postprocessing file
       # postprocessing files should be in .js or .ts and be in the workflows directory
       # opening with flat config will remove comments
-      - name: Get current date
+      - name: Get yesterday's date
         id: date
-        run: echo "::set-output name=date::$(date -d yesterday '+%m-%d-%Y')"
+        run: echo "::set-output name=date::$(date -d 'yesterday' +'%m-%d-%Y')"
+      - run: echo ${{ steps.date.outputs.date }}
       - name: Setup deno
         uses: denoland/setup-deno@main
         with:
@@ -27,17 +45,56 @@ jobs:
         uses: githubocto/flat@v3
         with:
           http_url: https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/vaccine_data_global.csv
-          downloaded_filename: vaccineDailyReport.csv
+          downloaded_filename: ./src/data/vaccineDailyReport.csv
       - name: Fetch data
         uses: githubocto/flat@v3
-        with:
-          http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{steps.date.outputs.date }}.csv
-          downloaded_filename: jhu.csv
-      - run: mkdir -p ./src/data/ 
-      - run: mv *.csv ./src/data/
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with: 
-          commit_message: "[Bot] Update csv files."
-          commit_user_name: JakeSchultz
-          commit_user_email: jmschultz93@hotmail.com
-          commit_author: JakeSchultz <jmschultz93@hotmail.com>
+        with:       
+          http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
+          # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
+          downloaded_filename: ./src/data/jhu.csv
+      # - name: push local commits
+      #   run: |
+      #     git config --global user.name 'JakeSchultz'
+      #     git config --global user.email 'JakeSchultz@users.noreply.github.com'
+      #     git add .
+      #     git commit --allow-empty -m "Automated daily data updates p1"
+      #     git merge -s ours
+      #     git push origin main --force
+      # - uses: stefanzweifel/git-auto-commit-action@v4
+      #   with: 
+      #     commit_message: "[Bot] Update csv files."
+      #     commit_user_name: JakeSchultz
+      #     commit_user_email: JakeSchultz@users.noreply.github.com
+      #     commit_author: JakeSchultz <JakeSchultz@users.noreply.github.com>
+      #     commit_options: '--allow-empty'
+      #     # pull_options will throw a warning but now the workflow seems to be working will verify tomorrow
+      #     pull_options: '-s recursive -X ours'
+      #     add_options: '--force'
+      #     push_options: '-u --force'
+      #     file_pattern: '*.csv'
+# # Moving csv files into data directory
+#   movecsv:
+#     if: always()
+#     needs: dataCollection
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check out repo
+#         uses: actions/checkout@v2
+#       - name: Pull from origin
+#         run: git pull origin 
+      
+#       - name: Move all csv files in root directory into ./src/data/
+#         run: git mv -fv ./*.csv ./src/data/
+
+#       - name: Commit daily csv file updates
+#         run: |
+#           git config --global user.name 'JakeSchultz'
+#           git config --global user.email 'JakeSchultz@users.noreply.github.com'
+#           git add .
+#           git commit --allow-empty -m "Automated daily data updates p2"
+#           git merge -s ours
+#           git push origin main --force
+
+# # Stefanzweifel additional options
+# # paste into the stefanzweifel section
+# #  add_options: '--renormalize'
