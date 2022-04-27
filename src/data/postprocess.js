@@ -19,7 +19,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 //const countryArr = countries.getNames("en", {select: "official"})
 (async () =>{
     //load ISO_FIPS_Lookup as JSON 
-    const isoLookupTemp = await csv().fromFile("UID_ISO_FIPS_LookUp_Table.csv");
+    const isoLookupTemp = await csv().fromFile(__dirname+"/UID_ISO_FIPS_LookUp_Table.csv");
     // remove dupes and non-countries in isoLookup so that we are left only with countries
     const isoLookup = [];
     await isoLookupTemp.forEach(object => {
@@ -29,7 +29,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     });
     // fs.writeFileSync("logIsoLookup.json",JSON.stringify(isoLookup));
     // load jhu data
-    const jhu = await csv().fromFile("jhu.csv");
+    const jhu = await csv().fromFile(__dirname+"/jhu.csv");
     //console.log(jhu);
     
     const countryRegionArr=[];
@@ -71,7 +71,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     //fs.writeFileSync("log.json",JSON.stringify(jhuTemp));
     
     //load vaccine daily data
-    const dailyVax = await csv().fromFile("vaccineDailyReport.csv");
+    const dailyVax = await csv().fromFile(__dirname+"/vaccineDailyReport.csv");
     //console.log(dailyVax);
     
     // filter out duplicate countries
