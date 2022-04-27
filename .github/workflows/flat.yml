@@ -8,7 +8,7 @@ on:
       - .github/workflows/flat.yml
 defaults:
   run:
-    working_directory: src/data
+    working-directory: src/data
 jobs:
   pre_job:
     continue-on-error: true # Uncomment once integration is finished
