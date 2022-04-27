@@ -105,7 +105,7 @@ function Center({ countries, loc, worldMap }) {
       }
 
       if (value == 4) {
-        return (d.deaths/d.cases) * 100;;
+        return (d.deaths/d.cases) * 100;
       }
     });
 
