@@ -5,7 +5,7 @@ on:
   workflow_dispatch: {}
   push:
     paths:
-      - .github/workflows/flat.yml
+      - .github/workflows/flat.yml 
       - ./src/data/postprocess.js
 
 jobs:

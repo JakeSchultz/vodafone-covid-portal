@@ -6,7 +6,7 @@ import * as DenoModule from "https://deno.land/std@0.135.0/node/module.ts";
 //import { parse } from "https://deno.land/std/encoding/csv.ts";
 import { writeCSV, removeFile } from "https://deno.land/x/flat@0.0.15/mod.ts";
 
-const UID_ISO_FIPS_LookUp_Table = "UID_ISO_FIPS_LookUp_Table.csv";
+const UID_ISO_FIPS_LookUp_Table = "../../src/data/UID_ISO_FIPS_LookUp_Table.csv";
 
 const require = DenoModule.createRequire(import.meta.url);
 const fs = require("fs");
@@ -29,7 +29,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     });
     // fs.writeFileSync("logIsoLookup.json",JSON.stringify(isoLookup));
     // load jhu data
-    const jhu = await csv().fromFile("jhu.csv");
+    const jhu = await csv().fromFile("../../src/data/jhu.csv");
     //console.log(jhu);
     
     const countryRegionArr=[];
@@ -71,7 +71,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     //fs.writeFileSync("log.json",JSON.stringify(jhuTemp));
     
     //load vaccine daily data
-    const dailyVax = await csv().fromFile("vaccineDailyReport.csv");
+    const dailyVax = await csv().fromFile("../../src/data/vaccineDailyReport.csv");
     //console.log(dailyVax);
     
     // filter out duplicate countries
@@ -123,7 +123,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     //await removeFile("vaccineDailyReport.csv")
 
     // save the data
-    await writeCSV("masterFile.csv", masterFile);
+    await writeCSV("../../src/data/masterFile.csv", masterFile);
     //await fs.writeFileSync("masterFile.csv", masterFile);
 
 
