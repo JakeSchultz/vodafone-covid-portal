@@ -6,13 +6,15 @@ on:
   push:
     paths:
       - .github/workflows/flat.yml
-defaults:
-  run:
-    working-directory: src/data
+
 jobs:
   pre_job:
+
     continue-on-error: true # Uncomment once integration is finished
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/data
     # Map a step output to a job output
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
@@ -29,6 +31,9 @@ jobs:
   dataCollection1:
     needs: pre_job
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/data
     steps:
       # postprocessing files should be in .js or .ts and be in the workflows directory
       # opening with flat config will remove comments
@@ -57,12 +62,15 @@ jobs:
       - run: echo ${{ steps.date.outputs.date }}
       - name: Setup deno
         uses: denoland/setup-deno@main
+        working-directory: src/data
         with:
           deno-version: v1.x
       - name: Check out repo
         uses: actions/checkout@v3
+        working-directory: src/data
       - name: Fetch data 2
         uses: githubocto/flat@v3
+        working-directory: src/data
         with:       
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
           # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
@@ -70,6 +78,9 @@ jobs:
   postprocess:
     needs: dataCollection2
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/data
     steps: 
       - name: Setup deno
         uses: denoland/setup-deno@main
