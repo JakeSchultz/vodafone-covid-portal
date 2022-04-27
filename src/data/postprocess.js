@@ -7,7 +7,7 @@ import * as DenoModule from "https://deno.land/std@0.135.0/node/module.ts";
 import { writeCSV } from "https://deno.land/x/flat@0.0.15/mod.ts";
 
 const uID_ISO_FIPS_LookUp_Table = "./UID_ISO_FIPS_LookUp_Table.csv";
-
+const filename = Deno.args[0]
 const require = DenoModule.createRequire(import.meta.url);
 const fs = require("fs");
 const csv = require("csvtojson");
@@ -29,7 +29,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     });
     // fs.writeFileSync("logIsoLookup.json",JSON.stringify(isoLookup));
     // load jhu data
-    const jhu = await csv().fromFile("jhu.csv");
+    const jhu = await csv().fromFile(filename);
     //console.log(jhu);
     
     const countryRegionArr=[];
