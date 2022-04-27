@@ -74,5 +74,7 @@ jobs:
           deno-version: v1.x
       - name: Check out repo
         uses: actions/checkout@v3
+        with: 
+          ref: ${{ github.head_ref }}
       - name: pp
         run: deno run -A --unstable postprocess.js # A postprocessing javascript or typescript file written with Deno
