@@ -75,4 +75,4 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v2
       - name: pp
-        run: deno run -A --unstable ./src/data/postprocess.js # A postprocessing javascript or typescript file written with Deno
+        run: deno run -A --compat --unstable ./src/data/postprocess.js # A postprocessing javascript or typescript file written with Deno
