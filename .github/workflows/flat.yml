@@ -34,7 +34,7 @@ jobs:
         with:
           deno-version: v1.x
       - name: Check out repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: FetchData1
         uses: githubocto/flat@v3
         with:
@@ -57,7 +57,7 @@ jobs:
         with:
           deno-version: v1.x
       - name: Check out repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Fetch data 2
         uses: githubocto/flat@v3
         with:       
@@ -73,7 +73,6 @@ jobs:
         with:
           deno-version: v1.x
       - name: Check out repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: pp
         run: deno run -A --unstable ./src/data/postprocess.js # A postprocessing javascript or typescript file written with Deno
-        
