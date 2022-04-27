@@ -4,6 +4,8 @@ import * as DenoModule from "https://deno.land/std@0.135.0/node/module.ts";
 //import * as DenoBuffer from "https://deno.land/std/io/buffer.ts";
 // import { BufReader } from "https://deno.land/std/io/buffer.ts";
 //import { parse } from "https://deno.land/std/encoding/csv.ts";
+import { writeCSV } from "https://deno.land/x/flat@0.0.15/mod.ts";
+
 const uID_ISO_FIPS_LookUp_Table = "./UID_ISO_FIPS_LookUp_Table.csv";
 
 const require = DenoModule.createRequire(import.meta.url);
@@ -117,7 +119,8 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     //console.log(masterFile)
 
     // save the data
-    fs.writeFileSync("masterFile.csv", masterFile);
+    writeCSV("masterFile.csv", masterFile);
+    //fs.writeFileSync("masterFile.csv", masterFile);
 
 
 })();
