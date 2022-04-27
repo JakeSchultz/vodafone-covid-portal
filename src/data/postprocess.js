@@ -16,7 +16,7 @@ const _ = require("lodash");
 const countries = require("i18n-iso-countries");
 
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
-//const countryArr = countries.getNames("en", {select: "official"})
+
 (async () =>{
     //load ISO_FIPS_Lookup as JSON 
     const isoLookupTemp = await csv().fromFile(UID_ISO_FIPS_LookUp_Table);
