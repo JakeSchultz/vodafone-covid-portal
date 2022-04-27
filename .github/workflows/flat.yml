@@ -32,7 +32,7 @@ jobs:
       - name: Setup deno
         uses: denoland/setup-deno@main
         with:
-          deno-version: v1.21.x
+          deno-version: v1.x
       - name: Check out repo
         uses: actions/checkout@v2
       - name: FetchData1
@@ -55,7 +55,7 @@ jobs:
       - name: Setup deno
         uses: denoland/setup-deno@main
         with:
-          deno-version: v1.21.x
+          deno-version: v1.x
       - name: Check out repo
         uses: actions/checkout@v2
       - name: Fetch data 2
@@ -64,4 +64,15 @@ jobs:
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
           # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
           downloaded_filename: ./src/data/jhu.csv
-          postprocess: ./src/data/postprocess.js # A postprocessing javascript or typescript file written with Deno
+  postprocess:
+    needs: dataCollection2
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Setup deno
+        uses: denoland/setup-deno@main
+        with:
+          deno-version: v1.x
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: pp
+        run: deno run -A ./src/data/postprocess.js # A postprocessing javascript or typescript file written with Deno
