@@ -67,14 +67,12 @@ jobs:
           deno-version: v1.x
       - name: Check out repo
         uses: actions/checkout@v3
-        working-directory: src/data
       - name: Fetch data 2
         uses: githubocto/flat@v3
-        working-directory: src/data
         with:       
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
           # http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-29-2022.csv
-          downloaded_filename: jhu.csv
+          downloaded_filename: ./src/data/jhu.csv
   postprocess:
     needs: dataCollection2
     runs-on: ubuntu-latest
