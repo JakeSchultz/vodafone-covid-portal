@@ -31,7 +31,6 @@ jobs:
   dataCollection1:
     needs: pre_job
     runs-on: ubuntu-latest
-    defaults:
     steps:
       # postprocessing files should be in .js or .ts and be in the workflows directory
       # opening with flat config will remove comments
