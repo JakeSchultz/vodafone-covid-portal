@@ -119,7 +119,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     //console.log(masterFile)
 
     // save the data
-    writeCSV("masterFile.csv", masterFile);
+    await writeCSV("./masterFile.csv", masterFile);
     //fs.writeFileSync("masterFile.csv", masterFile);
 
 
