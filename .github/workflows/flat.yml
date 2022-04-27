@@ -22,7 +22,7 @@ jobs:
           skip_after_successful_duplicate: 'true'
           paths_ignore: '["**/README.md", "**/docs/**"]'
           do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
-
+ 
   dataCollection1:
     needs: pre_job
     runs-on: ubuntu-latest
