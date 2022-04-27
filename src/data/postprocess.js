@@ -4,7 +4,7 @@ import * as DenoModule from "https://deno.land/std@0.135.0/node/module.ts";
 //import * as DenoBuffer from "https://deno.land/std/io/buffer.ts";
 // import { BufReader } from "https://deno.land/std/io/buffer.ts";
 //import { parse } from "https://deno.land/std/encoding/csv.ts";
-import { writeCSV } from "https://deno.land/x/flat@0.0.15/mod.ts";
+import { writeCSV, removeFile } from "https://deno.land/x/flat@0.0.15/mod.ts";
 
 const UID_ISO_FIPS_LookUp_Table = "../../src/data/UID_ISO_FIPS_LookUp_Table.csv";
 
@@ -117,6 +117,10 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     const masterFile = await new Parser({quote: "", fields: ["Country_Region","Confirmed","Deaths","Incident_Rate","Case_Fatality_Ratio","People_partially_vaccinated","People_fully_vaccinated"]}).parse(masterTemp1);
 
     //console.log(masterFile)
+
+    // remove old files to save space
+    await removeFile("../../src/data/jhu.csv")
+    await removeFile("../../src/data/vaccineDailyReport.csv")
 
     // save the data
     await writeCSV("masterFile.csv", masterFile);
