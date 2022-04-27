@@ -38,15 +38,16 @@ jobs:
       - name: Setup deno
         uses: denoland/setup-deno@main
         with:
-          deno-version: v1.x.x
+          deno-version: v1.21.x
       - name: Check out repo
         uses: actions/checkout@v2
-      - name: Fetch data
+      - name: FetchData1
         uses: githubocto/flat@v3
         with:
           http_url: https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/vaccine_data_global.csv
           downloaded_filename: ./src/data/vaccineDailyReport.csv
-      - name: Fetch data
+      - needs: FetchData1
+        name: Fetch data 2
         uses: githubocto/flat@v3
         with:       
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
