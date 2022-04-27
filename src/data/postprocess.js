@@ -29,7 +29,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     });
     // fs.writeFileSync("logIsoLookup.json",JSON.stringify(isoLookup));
     // load jhu data
-    const jhu = await csv().fromFile("jhu.csv");
+    const jhu = await csv().fromFile("./jhu.csv");
     //console.log(jhu);
     
     const countryRegionArr=[];
@@ -71,7 +71,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     //fs.writeFileSync("log.json",JSON.stringify(jhuTemp));
     
     //load vaccine daily data
-    const dailyVax = await csv().fromFile("vaccineDailyReport.csv");
+    const dailyVax = await csv().fromFile("./vaccineDailyReport.csv");
     //console.log(dailyVax);
     
     // filter out duplicate countries
