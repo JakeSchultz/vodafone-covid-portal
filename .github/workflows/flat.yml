@@ -23,8 +23,25 @@ jobs:
           paths_ignore: '["**/README.md", "**/docs/**"]'
           do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
 
-  dataCollection:
+  dataCollection1:
     needs: pre_job
+    runs-on: ubuntu-latest
+    steps:
+      # postprocessing files should be in .js or .ts and be in the workflows directory
+      # opening with flat config will remove comments
+      - name: Setup deno
+        uses: denoland/setup-deno@main
+        with:
+          deno-version: v1.21.x
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: FetchData1
+        uses: githubocto/flat@v3
+        with:
+          http_url: https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/vaccine_data_global.csv
+          downloaded_filename: ./src/data/vaccineDailyReport.csv
+  dataCollection2:
+    needs: dataCollection1
     runs-on: ubuntu-latest
     steps:
       # Remove Get current date and everything below mkdir to open with flat config to add new sources
@@ -41,13 +58,7 @@ jobs:
           deno-version: v1.21.x
       - name: Check out repo
         uses: actions/checkout@v2
-      - name: FetchData1
-        uses: githubocto/flat@v3
-        with:
-          http_url: https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/vaccine_data_global.csv
-          downloaded_filename: ./src/data/vaccineDailyReport.csv
-      - needs: FetchData1
-        name: Fetch data 2
+      - name: Fetch data 2
         uses: githubocto/flat@v3
         with:       
           http_url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${{ steps.date.outputs.date }}.csv
