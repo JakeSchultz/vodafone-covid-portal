@@ -62,7 +62,6 @@ jobs:
       - run: echo ${{ steps.date.outputs.date }}
       - name: Setup deno
         uses: denoland/setup-deno@main
-        working-directory: src/data
         with:
           deno-version: v1.x
       - name: Check out repo
