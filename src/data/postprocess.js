@@ -19,7 +19,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 //const countryArr = countries.getNames("en", {select: "official"})
 (async () =>{
     //load ISO_FIPS_Lookup as JSON 
-    const isoLookupTemp = await csv().fromFile(uID_ISO_FIPS_LookUp_Table);
+    const isoLookupTemp = await csv().fromFile("UID_ISO_FIPS_LookUp_Table.csv");
     // remove dupes and non-countries in isoLookup so that we are left only with countries
     const isoLookup = [];
     await isoLookupTemp.forEach(object => {
