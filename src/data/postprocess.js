@@ -119,8 +119,8 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     //console.log(masterFile)
 
     // remove old files to save space
-    await removeFile("../../src/data/jhu.csv")
-    await removeFile("../../src/data/vaccineDailyReport.csv")
+    // await removeFile("../../src/data/jhu.csv")
+    // await removeFile("../../src/data/vaccineDailyReport.csv")
 
     // save the data
     await writeCSV("../../src/data/masterFile.csv", masterFile);
