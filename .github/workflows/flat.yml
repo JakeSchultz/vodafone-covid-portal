@@ -46,7 +46,7 @@ jobs:
         with:
           http_url: https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/global_data/vaccine_data_global.csv
           downloaded_filename: ./src/data/vaccineDailyReport.csv
-
+ 
       # Remove Get current date and everything below mkdir to open with flat config to add new sources
       # or to add a postprocessing file
       # postprocessing files should be in .js or .ts and be in the workflows directory
