@@ -19,6 +19,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
 (async () =>{
     //load ISO_FIPS_Lookup as JSON 
+    console.log("Begin loading data\nLoading: LookUp Table")
     const isoLookupTemp = await csv().fromFile(UID_ISO_FIPS_LookUp_Table);
     // remove dupes and non-countries in isoLookup so that we are left only with countries
     const isoLookup = [];
@@ -27,6 +28,8 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
             isoLookup.push(object);
         }
     });
+    console.log("LookUp Table loaded");
+
     // fs.writeFileSync("logIsoLookup.json",JSON.stringify(isoLookup));
     // load jhu data
     const jhu = await csv().fromFile("../../src/data/jhu.csv");
@@ -35,33 +38,35 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     const countryRegionArr=[];
     // filter out duplicate countries
     const jhuTemp = [];
+    console.log("Loading jhu data")
     await jhu.forEach(function(object,index) {
         //console.log(object);
         //console.log(JSON.stringify(object.Country_Region));          
-            if(countries.getAlpha3Code(object.Country_Region,"en")){
-                if(countryRegionArr.includes(object.Country_Region)){
-                    //do nothing
-                }else{ 
-                    countryRegionArr.push(object.Country_Region);
-                    let i = 1;
-                    if(index<jhu.length-1){
+        if(countries.getAlpha3Code(object.Country_Region,"en")){
+            if(countryRegionArr.includes(object.Country_Region)){
+                //do nothing
+            }else{ 
+                countryRegionArr.push(object.Country_Region);
+                let i = 1;
+                if(index<jhu.length-1){
                         
-                        while(object.Country_Region===jhu[index+i].Country_Region ){
-                            // console.log(object.Country_Region);
-                            object.Confirmed = `${(parseInt(object.Confirmed)+parseInt(jhu[index+i].Confirmed))}`;
-                            object.Deaths = `${(parseInt(object.Deaths)+parseInt(jhu[index+i].Deaths))}`;
-                            object.Case_Fatality_Ratio = `${(parseInt(object.Confirmed)/parseInt(object.Deaths))}`;
-                            i++;
-                        }
-
-                        // console.log("Population:"+parseInt(isoLookup.Country_Region))
-                        //object.Population = parseInt(uID_ISO_FIPS_LookUp_Table.Country_Region.Population)
-                        //object.Incident_Rate = `${(parseInt(object.Confirmed)/parseInt(uID_ISO_FIPS_LookUp_Table.Population))}`
-                        jhuTemp.push(object);
+                    while(object.Country_Region===jhu[index+i].Country_Region ){
+                        // console.log(object.Country_Region);
+                        object.Confirmed = `${(parseInt(object.Confirmed)+parseInt(jhu[index+i].Confirmed))}`;
+                        object.Deaths = `${(parseInt(object.Deaths)+parseInt(jhu[index+i].Deaths))}`;
+                        object.Case_Fatality_Ratio = `${(parseInt(object.Confirmed)/parseInt(object.Deaths))}`;
+                        i++;
                     }
+
+                    // console.log("Population:"+parseInt(isoLookup.Country_Region))
+                    //object.Population = parseInt(uID_ISO_FIPS_LookUp_Table.Country_Region.Population)
+                    //object.Incident_Rate = `${(parseInt(object.Confirmed)/parseInt(uID_ISO_FIPS_LookUp_Table.Population))}`
+                    jhuTemp.push(object);
                 }
             }
-        });
+        }
+    });
+    console.log("jhu loaded")
 
 // TODO: calc the incident rate and fatality ratio properly for locations with multiple provinces
 // Get the Vaccine data to properly combine with the rest of the data
@@ -71,6 +76,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     //fs.writeFileSync("log.json",JSON.stringify(jhuTemp));
     
     //load vaccine daily data
+    console.log("Loading vaccine daily data")
     const dailyVax = await csv().fromFile("../../src/data/vaccineDailyReport.csv");
     //console.log(dailyVax);
     
@@ -82,10 +88,11 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
         if(object.Province_State===""){
             if ( countryRegionArr.includes(object.Country_Region)){
                 dailyVaxTemp.push(object);
+                console.log(".")
             }
         }
     });
-    
+    console.log("Vaccine data loaded")
     
     //Filter jhu data to only what we are looking for
     // console.log(jhu)
@@ -100,12 +107,14 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
     //console.log(dailyVaxTemp);
 
     // Combine the files using lodash
+    console.log("Combining files")
     const masterTemp1 = await _({}).merge(_(jhuTemp).groupBy("Country_Region"),_(dailyVaxTemp).groupBy("Country_Region"),_(isoLookup).groupBy("Country_Region")).values().flatten().value();
-    
+    console.log("Files combined")
     //console.log(masterTemp1);
     //fs.writeFileSync("log.json",JSON.stringify(masterTemp1));
     //object.Incident_Rate = `${(parseInt(object.Confirmed)/parseInt(uID_ISO_FIPS_LookUp_Table.Population))}`
     const masterTemp2 = [];
+    console.log("Calculating incident rates")
     await masterTemp1.forEach(object => {
         if(object){
             object.Incident_Rate = `${(parseInt(object.Confirmed)/parseInt(object.Population))}`||{};
@@ -113,8 +122,8 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
         }
     });
 
-
-    const masterFile = await new Parser({quote: "", fields: ["Country_Region","Confirmed","Deaths","Incident_Rate","Case_Fatality_Ratio","People_partially_vaccinated","People_fully_vaccinated"]}).parse(masterTemp1);
+    console.log("Converting back to csv")
+    const masterFile = await new Parser({quote: "", fields: ["Country_Region","Confirmed","Deaths","Incident_Rate","Case_Fatality_Ratio","People_partially_vaccinated","People_fully_vaccinated"]}).parse(masterTemp2);
 
     //console.log(masterFile)
 
@@ -124,6 +133,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
     // save the data
     await writeCSV("../../src/data/masterFile.csv", masterFile);
+    console.log("Converted and saved to masterFile.csv")
     //await fs.writeFileSync("masterFile.csv", masterFile);
 
 
